@@ -1,0 +1,11 @@
+// USWDS custom style overrides for demos on docs page
+iframe:focus,
+[href]:focus,
+[tabindex]:focus,
+[contentEditable='true']:focus,
+input:not([disabled]):focus,
+select:not([disabled]):focus,
+textarea:not([disabled]):focus,
+button:not([disabled]):focus {
+  outline: 2px dotted #aeb0b5;
+}

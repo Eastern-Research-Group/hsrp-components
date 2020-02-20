@@ -1,0 +1,6 @@
+# Modal
+
+## Example
+
+<br>
+<ModalDemo />
