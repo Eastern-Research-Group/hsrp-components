@@ -1,6 +1,12 @@
+[![Netlify Status](https://api.netlify.com/api/v1/badges/23227650-0d14-46e8-8582-a4a9b278d403/deploy-status)](https://app.netlify.com/sites/hsrp-components/deploys)
+
 # HSRP Components
 
 > Shared component library for HSRP apps using Vue and documented via [VuePress](https://vuepress.vuejs.org/).
+
+## Full Documentation
+
+[View component demos and documentation here](https://hsrp-components.netlify.com/)
 
 ## Setup
 
