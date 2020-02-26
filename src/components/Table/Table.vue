@@ -41,7 +41,7 @@ import orderBy from 'lodash/orderBy';
 import some from 'lodash/some';
 import toLower from 'lodash/toLower';
 import debounce from 'lodash/debounce';
-import VirtualScroller from './VirtualScroller';
+import VirtualScroller from './VirtualScroller.vue';
 
 export default {
   props: {

@@ -7,12 +7,6 @@ module.exports = {
   rules: {
     'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
-    'import/extensions': [
-      'error',
-      {
-        vue: 'never',
-      },
-    ],
     'import/prefer-default-export': 'off',
   },
   parserOptions: {
