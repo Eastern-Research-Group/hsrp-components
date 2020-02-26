@@ -1,9 +1,10 @@
 <template>
   <div class="loader" role="alert">
     <div class="spinner"></div>
-    <div class="loading">Loading</div>
+    <div class="label">Loading</div>
   </div>
 </template>
+
 <style lang="scss" scoped>
 @import '../styles/variables';
 
@@ -27,7 +28,7 @@
     border-top: 13px solid $blue;
   }
 
-  .loading:after {
+  .label:after {
     overflow: hidden;
     display: inline-block;
     vertical-align: bottom;
@@ -38,6 +39,21 @@
 
   &.padded {
     padding: 2rem;
+  }
+
+  &.inline {
+    display: inline;
+
+    .spinner {
+      width: 1rem;
+      height: 1rem;
+      margin: 0 0 0 0.5rem;
+      border-width: 2px;
+    }
+
+    .label {
+      display: none;
+    }
   }
 }
 
