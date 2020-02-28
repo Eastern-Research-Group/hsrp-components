@@ -73,6 +73,14 @@ export default {
       sortDir: 'asc',
     };
   },
+  watch: {
+    columns() {
+      this.buildTableColumns();
+    },
+    rows() {
+      this.tableData = cloneDeep(this.rows);
+    },
+  },
   components: { VirtualScroller },
   methods: {
     sortTable(col) {
@@ -102,26 +110,28 @@ export default {
       }
     }, 500),
     /* eslint-enable func-names */
+    buildTableColumns() {
+      this.tableColumns = this.columns.map((col) => {
+        if (typeof col === 'string') {
+          return {
+            key: col,
+            label: col,
+            align: 'center',
+          };
+        }
+        return {
+          key: col.key,
+          label: col.label || col.key,
+          align: col.align || 'center',
+          style: col.style,
+          disableSort: col.disableSort || false,
+        };
+      });
+    },
   },
   mounted() {
     this.tableData = cloneDeep(this.rows);
-
-    this.tableColumns = this.columns.map((col) => {
-      if (typeof col === 'string') {
-        return {
-          key: col,
-          label: col,
-          align: 'center',
-        };
-      }
-      return {
-        key: col.key,
-        label: col.label || col.key,
-        align: col.align || 'center',
-        style: col.style,
-        disableSort: col.disableSort || false,
-      };
-    });
+    this.buildTableColumns();
 
     // todo: add IE polyfill for sticky
   },
