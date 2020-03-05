@@ -16,7 +16,7 @@
           :disabled="option.disabled"
           @input="$emit('change', $event)"
         />
-        <label :for="`${id}_${option.value}`">{{ option.label }}</label>
+        <label :for="`${id}_${option.value}`" :title="option.title">{{ option.label }}</label>
       </li>
     </ul>
   </fieldset>
