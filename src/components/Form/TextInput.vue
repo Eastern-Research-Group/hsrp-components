@@ -7,7 +7,7 @@
     <VueSelect
       v-if="type === 'vue-select'"
       class="input"
-      v-bind="{ ...vueSelectProps, ...inputProps }"
+      v-bind="{ ...inputProps, ...vueSelectProps }"
       @input="$emit('input', $event)"
     >
       <span slot="no-options" class="no-options-msg">{{ vueSelectProps.noOptionsMsg || 'No matching options.' }}</span>
@@ -81,6 +81,8 @@ export default {
 
 // Vue-Select input styles
 ::v-deep .v-select {
+  padding: 0;
+
   ::placeholder {
     color: #999;
   }
@@ -93,6 +95,7 @@ export default {
     border-radius: 0;
     border-color: rgb(169, 169, 169);
     margin-bottom: 0.5em;
+    padding: 0;
   }
 
   .vs__deselect {
@@ -103,6 +106,14 @@ export default {
     width: unset;
     padding: 0 5px;
     margin-bottom: 0;
+
+    &:focus {
+      margin: 0;
+    }
+  }
+
+  .vs__selected {
+    margin: 2px 2px 2px;
   }
 }
 </style>
