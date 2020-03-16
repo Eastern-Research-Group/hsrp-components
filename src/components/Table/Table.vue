@@ -1,6 +1,7 @@
 <template>
   <section>
     <div class="table-filter" v-if="shouldDisplayFilter">
+      <slot name="filters" />
       <label for="tableSearch">Search</label>
       <input id="tableSearch" type="text" @input="filterTable($event)" />
     </div>
