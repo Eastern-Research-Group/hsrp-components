@@ -2,7 +2,8 @@
   <div class="input-container">
     <label class="label" :for="id">
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
-      {{ label }}
+      <span v-if="type === 'vue-select'">{{ vueSelectLabel }}</span>
+      <span v-else-if="type === 'textarea'">{{ label }}</span>
     </label>
     <VueSelect
       v-if="type === 'vue-select'"
@@ -40,6 +41,9 @@ export default {
       required: true,
     },
     srOnlyLabel: {
+      type: String,
+    },
+    vueSelectLabel: {
       type: String,
     },
     type: {
