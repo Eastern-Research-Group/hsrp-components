@@ -1,6 +1,14 @@
 <template>
   <div class="input-container">
-    <input class="input" :id="id" :value="value" :checked="checked" type="checkbox" @change="$emit('change', $event)" />
+    <input
+      class="input"
+      :id="id"
+      :value="value"
+      :checked="checked"
+      type="checkbox"
+      :disabled="disabled"
+      @change="$emit('change', $event)"
+    />
     <label class="label" :for="id">
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
@@ -19,6 +27,9 @@ export default {
       type: [String, Number],
     },
     checked: {
+      type: Boolean,
+    },
+    disabled: {
       type: Boolean,
     },
     label: {
