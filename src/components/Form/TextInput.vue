@@ -33,7 +33,7 @@ export default {
       required: true,
     },
     value: {
-      type: [String, Number, Array],
+      type: [String, Number, Array, Object],
     },
     label: {
       type: String,
@@ -105,7 +105,7 @@ export default {
   .vs__search {
     width: unset;
     padding: 0 5px;
-    margin-bottom: 0;
+    margin: 0;
 
     &:focus {
       margin: 0;
