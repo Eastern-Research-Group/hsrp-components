@@ -7,7 +7,7 @@
     "docs:build": "vuepress build docs",
     "docs:dev": "vuepress dev docs"
   },
-  "main": "src/index.js",
+  "main": "dist/hsrp-components.umd.min.js",
   "files": [
     "src",
     "dist/*.{js,css}"
