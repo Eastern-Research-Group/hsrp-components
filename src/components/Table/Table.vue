@@ -173,13 +173,19 @@ export default {
 <style lang="scss" scoped>
 .table-container {
   ::v-deep {
-    @import 'bootstrap/scss/bootstrap';
-    @import 'bootstrap-vue/src/_variables.scss';
-    @import 'bootstrap-vue/src/components/table/index.scss';
-    @import 'bootstrap-vue/src/components/pagination/index.scss';
-
     #filter {
       margin: 0 0 0.5rem 0.5rem;
+    }
+
+    .b-table-sticky-header {
+      overflow: auto;
+
+      .b-table th {
+        position: sticky;
+        position: -webkit-sticky;
+        z-index: 99;
+        top: -1px;
+      }
     }
 
     .b-table {
@@ -197,6 +203,7 @@ export default {
       }
 
       thead th {
+        position: relative;
         text-align: center;
         background-color: #f1f1f1 !important;
         border-right: 1px solid #fff;
@@ -205,10 +212,74 @@ export default {
         &[tabindex='0']:focus {
           outline-offset: -2px;
         }
+
+        &[aria-sort] {
+          cursor: pointer;
+          padding-right: calc(0.75rem + 0.65em);
+          background-position: right 0.375rem center;
+          background-repeat: no-repeat;
+          background-size: 0.65em 1em;
+          background-image: url('./sort-inactive.svg');
+        }
+
+        &[aria-sort='ascending'] {
+          background-image: url('./sort-asc.svg');
+        }
+
+        &[aria-sort='descending'] {
+          background-image: url('./sort-desc.svg');
+        }
+      }
+
+      &.table-striped tbody tr:nth-of-type(even) {
+        background-color: rgba(0, 0, 0, 0.05);
       }
     }
 
     .b-pagination {
+      margin-top: 1rem;
+      display: flex;
+      padding-left: 0;
+      list-style: none;
+      border-radius: 0.25rem;
+
+      .flex-fill {
+        flex: 1 1 auto;
+      }
+
+      .page-item.disabled .page-link {
+        color: #6c757d;
+        pointer-events: none;
+        cursor: auto;
+        background-color: #fff;
+        border-color: #dee2e6;
+      }
+
+      .page-item:first-child .page-link {
+        margin-left: 0;
+        border-top-left-radius: 0.25rem;
+        border-bottom-left-radius: 0.25rem;
+      }
+
+      .page-item.active .page-link {
+        z-index: 3;
+        color: #fff;
+        background-color: #005ea2;
+        border-color: #005ea2;
+      }
+
+      .page-link {
+        position: relative;
+        display: block;
+        padding: 0.5rem 0.75rem;
+        margin-left: -1px;
+        line-height: 1.25;
+        color: #005ea2;
+        background-color: #fff;
+        border: 1px solid #dee2e6;
+        border-radius: 0;
+      }
+
       .page-link {
         max-width: inherit;
       }
@@ -223,7 +294,7 @@ export default {
     ::v-deep th {
       position: sticky;
       position: -webkit-sticky;
-      z-index: 999;
+      z-index: 99;
       top: -1px;
     }
   }
