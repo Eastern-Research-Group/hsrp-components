@@ -49,6 +49,7 @@
       height: 1rem;
       margin: 0 0 0 0.5rem;
       border-width: 2px;
+      vertical-align: top;
     }
 
     .label {
