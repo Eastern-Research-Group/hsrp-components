@@ -113,6 +113,9 @@ export default {
     columns() {
       this.buildTableColumns();
     },
+    rows() {
+      this.filteredRows = cloneDeep(this.rows);
+    },
   },
   methods: {
     buildTableColumns() {
