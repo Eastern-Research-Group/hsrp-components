@@ -222,15 +222,15 @@ export default {
           background-position: right 0.375rem center;
           background-repeat: no-repeat;
           background-size: 0.65em 1em;
-          background-image: url('./sort-inactive.svg');
+          background-image: url('~@/assets/img/sort-inactive.svg');
         }
 
         &[aria-sort='ascending'] {
-          background-image: url('./sort-asc.svg');
+          background-image: url('~@/assets/img/sort-asc.svg');
         }
 
         &[aria-sort='descending'] {
-          background-image: url('./sort-desc.svg');
+          background-image: url('~@/assets/img/sort-desc.svg');
         }
       }
 
