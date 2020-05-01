@@ -222,15 +222,15 @@ export default {
           background-position: right 0.375rem center;
           background-repeat: no-repeat;
           background-size: 0.65em 1em;
-          background-image: url('~@/assets/img/sort-inactive.svg');
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='101' height='101' preserveAspectRatio='none'><path opacity='.3' d='M51 1l25 23 24 22H1l25-22zm0 100l25-23 24-22H1l25 22z'/></svg>");
         }
 
         &[aria-sort='ascending'] {
-          background-image: url('~@/assets/img/sort-asc.svg');
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='101' height='101' preserveAspectRatio='none'><path d='M51 1l25 23 24 22H1l25-22z'/><path opacity='.3' d='M51 101l25-23 24-22H1l25 22z'/></svg>");
         }
 
         &[aria-sort='descending'] {
-          background-image: url('~@/assets/img/sort-desc.svg');
+          background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='101' height='101' preserveAspectRatio='none'><path opacity='.3' d='M51 1l25 23 24 22H1l25-22z'/><path d='M51 101l25-23 24-22H1l25 22z'/></svg>");
         }
       }
 
