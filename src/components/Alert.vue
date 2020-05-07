@@ -39,5 +39,6 @@ export default {
 
 .usa-alert {
   margin: 1rem 0;
+  font-size: 1rem;
 }
 </style>
