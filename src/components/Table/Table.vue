@@ -206,7 +206,6 @@ export default {
       }
 
       thead th {
-        position: relative;
         text-align: center;
         background-color: #f1f1f1 !important;
         border-right: 1px solid #fff;
