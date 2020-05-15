@@ -1,6 +1,6 @@
 <template>
   <button :class="`usa-button usa-button--${btnStyle}`" :type="type" :title="title" @click="$emit('click')">
-    <span v-if="icon" :class="`fa fa-${icon} ${label ? 'margin-right-05' : ''}`"></span>
+    <span v-if="icon" :class="`btn-icon fa fa-${icon} ${label ? 'margin-right-05' : ''}`"></span>
     {{ label }}
     <slot />
   </button>
