@@ -103,13 +103,16 @@ export default {
   }
 
   .vs__search {
-    width: unset;
     padding: 0 5px;
     margin: 0;
 
     &:focus {
       margin: 0;
     }
+  }
+
+  &.vs--single .vs__selected {
+    max-width: calc(100% - 14px);
   }
 
   .vs__selected {
