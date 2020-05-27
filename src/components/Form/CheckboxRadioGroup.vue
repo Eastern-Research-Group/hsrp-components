@@ -12,9 +12,9 @@
           :id="`${id}_${option.value}`"
           :name="id"
           :value="option.value"
-          :checked="option.value === value"
+          :checked="isChecked(option)"
           :disabled="option.disabled"
-          @input="$emit('change', $event)"
+          @input="emitValueChange"
         />
         <label :for="`${id}_${option.value}`" :title="option.title">{{ option.label }}</label>
       </li>
@@ -59,6 +59,29 @@ export default {
         }
         return option;
       });
+    },
+  },
+  methods: {
+    isChecked(option) {
+      if (Array.isArray(this.value)) {
+        return this.value.indexOf(option.value.toString()) > -1;
+      }
+      return option.value === this.value;
+    },
+    emitValueChange(event) {
+      const eventVal = event.target.value;
+      const currentVal = this.value;
+
+      // Checkbox group requires special logic to store as array of values instead of single selected value
+      if (this.type === 'checkbox') {
+        if (currentVal.indexOf(eventVal) > -1) {
+          currentVal.splice(currentVal.indexOf(eventVal), 1);
+        } else {
+          currentVal.push(eventVal);
+        }
+        return this.$emit('change', currentVal);
+      }
+      return this.$emit('change', event);
     },
   },
 };

@@ -40,5 +40,10 @@ export default {
 .usa-alert {
   margin: 1rem 0;
   font-size: 1rem;
+
+  ul {
+    padding-left: 1.5rem;
+    padding-bottom: 0.5rem;
+  }
 }
 </style>

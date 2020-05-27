@@ -103,6 +103,7 @@ export default {
   }
 
   .vs__search {
+    width: inherit;
     padding: 0 5px;
     margin: 0;
 
@@ -113,6 +114,10 @@ export default {
 
   &.vs--single .vs__selected {
     max-width: calc(100% - 14px);
+
+    & + .vs__search {
+      width: 0;
+    }
   }
 
   .vs__selected {
