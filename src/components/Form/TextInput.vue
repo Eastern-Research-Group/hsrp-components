@@ -53,6 +53,9 @@ export default {
       type: Number,
       default: 0,
     },
+    disabled: {
+      type: Boolean,
+    },
     vueSelectProps: {
       type: Object,
       default: () => ({}),
@@ -69,6 +72,7 @@ export default {
         type: this.type,
         placeholder: this.placeholder,
         min: this.min,
+        disabled: this.disabled,
       };
     },
   },

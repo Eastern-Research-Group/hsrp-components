@@ -16,7 +16,13 @@
       :style="{ maxHeight: height }"
     >
       <template slot-scope="{ items }">
-        <BTable v-bind="tableProps" :items="items" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc" />
+        <BTable
+          v-bind="tableProps"
+          :items="items"
+          :sort-by.sync="sortBy"
+          :sort-desc.sync="sortDesc"
+          @sort-changed="sortTable"
+        />
       </template>
     </VirtualScroller>
     <BTable
@@ -34,6 +40,11 @@
       <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
         <slot :name="slot" v-bind="scope" />
       </template>
+
+      <!-- Display loader when table is in busy state -->
+      <template v-slot:table-busy>
+        <Loader />
+      </template>
     </BTable>
 
     <BPagination v-if="perPage" v-model="currentPage" :total-rows="totalRows" :per-page="perPage" :limit="11" />
@@ -48,6 +59,7 @@ import some from 'lodash/some';
 import toLower from 'lodash/toLower';
 import { BTable, BPagination } from 'bootstrap-vue';
 import VirtualScroller from './VirtualScroller.vue';
+import Loader from '../Loader.vue';
 import TextInput from '../Form/TextInput.vue';
 
 export default {
@@ -82,8 +94,11 @@ export default {
       type: Boolean,
       default: false,
     },
+    emptyText: {
+      type: String,
+    },
   },
-  components: { BTable, BPagination, TextInput, VirtualScroller },
+  components: { BTable, BPagination, Loader, TextInput, VirtualScroller },
   data() {
     return {
       sortBy: this.defaultSort || '',
@@ -106,6 +121,9 @@ export default {
         filter: this.filter,
         striped: true,
         responsive: !this.shouldVirtualScroll,
+        'empty-text': this.emptyText,
+        'show-empty': !!this.emptyText,
+        'no-sort-reset': true,
       };
     },
   },
@@ -145,14 +163,14 @@ export default {
       let filterData = cloneDeep(this.rows);
       // only filter if value is not blank
       if (e.target.value !== '') {
-        filterData = filterData.filter((o) => some(o, (v) => toLower(v).indexOf(e.target.value) > -1));
+        filterData = filterData.filter((o) => some(o, (v) => toLower(v).indexOf(toLower(e.target.value)) > -1));
       }
       // set filteredRows to the filtered set
       this.filteredRows = filterData;
 
       // if table is currently sorted, maintain existing sort order
       if (this.sortBy !== '') {
-        this.sortTable();
+        this.sortTable({ sortBy: this.sortBy, sortDesc: this.sortDesc });
       }
     }, 500),
     /* eslint-enable func-names */
@@ -161,8 +179,8 @@ export default {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
-    sortTable() {
-      this.filteredRows = orderBy(this.filteredRows, [this.sortBy], [this.sortDesc ? 'desc' : 'asc']);
+    sortTable(ctx) {
+      this.filteredRows = orderBy(this.filteredRows, [ctx.sortBy], [ctx.sortDesc ? 'desc' : 'asc']);
     },
   },
   mounted() {
@@ -235,6 +253,10 @@ export default {
 
       &.table-striped tbody tr:nth-of-type(even) {
         background-color: rgba(0, 0, 0, 0.05);
+      }
+
+      &[aria-busy='true'] {
+        opacity: 0.6;
       }
     }
 

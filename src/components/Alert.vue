@@ -2,7 +2,7 @@
   <div :class="`usa-alert usa-alert--${type} ${validation ? 'usa-alert--validation' : ''}`" role="alert" tabindex="0">
     <div class="usa-alert__body">
       <h3 v-if="header" class="usa-alert__heading">{{ header }}</h3>
-      <p class="usa-alert__text">{{ text }}</p>
+      <p v-if="text" class="usa-alert__text">{{ text }}</p>
       <div v-if="$slots.default" class="usa-alert__text">
         <slot />
       </div>
@@ -44,6 +44,12 @@ export default {
   ul {
     padding-left: 1.5rem;
     padding-bottom: 0.5rem;
+  }
+
+  p {
+    margin-bottom: 0.5rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0;
   }
 }
 </style>

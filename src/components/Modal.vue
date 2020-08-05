@@ -83,7 +83,7 @@ export default {
   left: 0;
   right: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 9;
+  z-index: 99;
 
   display: flex;
   align-items: center;

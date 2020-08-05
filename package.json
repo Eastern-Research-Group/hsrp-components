@@ -1,6 +1,6 @@
 {
   "name": "hsrp-components",
-  "version": "0.1.17",
+  "version": "0.1.21",
   "scripts": {
     "build": "vue-cli-service build --report --target lib --name hsrp-components ./src/index.js",
     "lint": "vue-cli-service lint",
@@ -15,7 +15,7 @@
   "dependencies": {
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.9.0",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "uswds": "^2.7.0",
     "vue": "^2.6.11",
     "vue-select": "^3.4.0"

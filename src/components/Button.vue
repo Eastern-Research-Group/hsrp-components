@@ -26,7 +26,7 @@ export default {
 @import '../styles/variables';
 
 .usa-button {
-  margin: 0;
+  margin-bottom: 0;
   font-size: inherit;
   font-weight: bold;
 
@@ -43,6 +43,18 @@ export default {
     &.is-active {
       color: $green;
     }
+  }
+
+  &--success {
+    background-color: $bgGreen;
+
+    &:hover {
+      background-color: darken($bgGreen, 5);
+    }
+  }
+
+  &--big {
+    font-size: 1.33rem;
   }
 }
 </style>
