@@ -42,3 +42,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.input-container {
+  position: relative;
+}
+</style>
