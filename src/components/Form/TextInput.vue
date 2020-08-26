@@ -7,9 +7,16 @@
     <VueSelect
       v-if="type === 'vue-select'"
       class="input"
-      v-bind="{ ...inputProps, ...vueSelectProps }"
+      v-bind="{ ...inputProps, ...vueSelectProps, options: vueSelectOptions }"
+      :selectable="(option) => !option.group"
       @input="$emit('input', $event)"
     >
+      <template #option="option">
+        <div v-if="option.group" class="option-group">
+          {{ option.group }}
+        </div>
+        {{ option[vueSelectProps.label || inputProps.label || 'label'] }}
+      </template>
       <span slot="no-options" class="no-options-msg">{{ vueSelectProps.noOptionsMsg || 'No matching options.' }}</span>
     </VueSelect>
     <textarea
@@ -75,6 +82,27 @@ export default {
         disabled: this.disabled,
       };
     },
+    // Logic to allow for header groups within options list
+    // "group" must be added to all options passed to this component, and must be pre-sorted in order by group
+    vueSelectOptions() {
+      // No need to run if input is not vue-select
+      if (this.type !== 'vue-select') return [];
+
+      const labelProp = this.vueSelectProps.label || 'label';
+      if (this.vueSelectProps.options.filter((option) => !!option.group).length > 0) {
+        let currentGroup = this.vueSelectProps.options[0].group;
+        const options = [{ group: currentGroup, [labelProp]: null }];
+        this.vueSelectProps.options.forEach((option) => {
+          if (option.group !== currentGroup) {
+            options.push({ group: option.group, [labelProp]: null });
+            currentGroup = option.group;
+          }
+          options.push({ ...option, id: option[labelProp], group: null });
+        });
+        return options;
+      }
+      return this.vueSelectProps.options;
+    },
   },
 };
 </script>
@@ -126,6 +154,12 @@ export default {
 
   .vs__selected {
     margin: 2px 2px 2px;
+  }
+
+  .option-group {
+    font-weight: bold;
+    color: #222;
+    margin-left: -0.5rem;
   }
 }
 </style>
