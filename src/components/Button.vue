@@ -1,5 +1,11 @@
 <template>
-  <button :class="`usa-button usa-button--${btnStyle}`" :type="type" :title="title" :disabled="disabled" @click="$emit('click')">
+  <button
+    :class="`usa-button usa-button--${btnStyle}`"
+    :type="type"
+    :title="title"
+    :disabled="disabled"
+    @click="$emit('click')"
+  >
     <span v-if="icon" :class="`btn-icon fa fa-${icon} ${label ? 'margin-right-05' : ''}`"></span>
     {{ label }}
     <slot />
@@ -22,10 +28,10 @@ export default {
       default: false,
     },
     btnStyle: {
-      validator: function (value) {
+      validator(value) {
         // prop value must match one of the following
-        return ['unstyled', 'secondary', 'accent', 'base', 'success', 'big'].indexOf(value) !== -1
-      }
+        return ['unstyled', 'secondary', 'accent', 'base', 'success', 'big'].indexOf(value) !== -1;
+      },
     },
   },
 };
