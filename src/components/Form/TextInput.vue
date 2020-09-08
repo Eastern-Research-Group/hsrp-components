@@ -63,6 +63,9 @@ export default {
     disabled: {
       type: Boolean,
     },
+    readonly: {
+      type: Boolean,
+    },
     vueSelectProps: {
       type: Object,
       default: () => ({}),
@@ -79,14 +82,15 @@ export default {
         type: this.type,
         placeholder: this.placeholder,
         min: this.min,
-        disabled: this.disabled,
+        disabled: this.disabled || (this.type === 'vue-select' && this.readonly),
+        readonly: this.readonly,
       };
     },
     // Logic to allow for header groups within options list
     // "group" must be added to all options passed to this component, and must be pre-sorted in order by group
     vueSelectOptions() {
       // No need to run if input is not vue-select
-      if (this.type !== 'vue-select') return [];
+      if (this.type !== 'vue-select' || !this.vueSelectProps.options) return [];
 
       const labelProp = this.vueSelectProps.label || 'label';
       if (this.vueSelectProps.options.filter((option) => !!option.group).length > 0) {
@@ -109,6 +113,12 @@ export default {
 <style lang="scss" scoped>
 .input {
   padding: 0.25rem;
+
+  &[readonly] {
+    color: #222;
+    border: none;
+    background: none;
+  }
 }
 
 // Vue-Select input styles
@@ -160,6 +170,22 @@ export default {
     font-weight: bold;
     color: #222;
     margin-left: -0.5rem;
+  }
+
+  &[readonly] .vs__dropdown-toggle {
+    border: none;
+    background: none;
+
+    .vs__selected,
+    .vs__selected:hover {
+      cursor: text;
+    }
+
+    input,
+    .vs__actions,
+    .vs__selected button {
+      display: none;
+    }
   }
 }
 </style>

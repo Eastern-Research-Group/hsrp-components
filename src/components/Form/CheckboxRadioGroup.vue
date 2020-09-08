@@ -1,5 +1,5 @@
 <template>
-  <fieldset class="checkbox-radio-group">
+  <fieldset class="checkbox-radio-group" :readonly="readonly">
     <legend>
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
@@ -13,7 +13,7 @@
           :name="id"
           :value="option.value"
           :checked="isChecked(option)"
-          :disabled="option.disabled"
+          :disabled="option.disabled || readonly"
           @input="emitValueChange"
         />
         <label :for="`${id}_${option.value}`" :title="option.title">{{ option.label }}</label>
@@ -42,6 +42,10 @@ export default {
     type: {
       type: String,
       default: 'checkbox',
+    },
+    readonly: {
+      type: Boolean,
+      default: false,
     },
     options: {
       type: Array,
@@ -86,3 +90,26 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+.checkbox-radio-group[readonly] {
+  input:not(:checked) + label,
+  input:checked + label::before {
+    display: none;
+
+    & li {
+      display: none;
+    }
+  }
+
+  // Match vue-select styles to account for multiple selected checkboxes
+  input:checked + label {
+    cursor: text;
+    background-color: #f8f8f8;
+    border: 1px solid rgba(60, 60, 60, 0.26);
+    border-radius: 4px;
+    padding: 0 0.25em;
+    color: #333;
+  }
+}
+</style>
