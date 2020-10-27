@@ -30,7 +30,7 @@ export default {
     btnStyle: {
       validator(value) {
         // prop value must match one of the following
-        return ['unstyled', 'secondary', 'accent', 'base', 'success', 'big'].indexOf(value) !== -1;
+        return ['unstyled', 'secondary', 'accent', 'base', 'success', 'outline', 'big'].indexOf(value) !== -1;
       },
     },
   },
@@ -70,6 +70,11 @@ export default {
 
   &--big {
     font-size: 1.33rem;
+  }
+
+  &:disabled {
+    cursor: default;
+    pointer-events: auto; // allows for "title" tooltip to display on disabled buttons
   }
 }
 </style>
