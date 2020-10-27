@@ -196,7 +196,7 @@ export default {
       setTimeout(() => {
         const headerEls = this.$refs.tableRef.$el.querySelectorAll('thead th');
         const tableWidth = this.$refs.tableRef.$el.offsetWidth;
-        for (let i = 0; i < headerEls.length; i++) {
+        for (let i = 0; i < headerEls.length; i += 1) {
           const headerWidth = headerEls[i].offsetWidth;
           headerEls[i].style.width = `${(headerWidth / tableWidth) * 100}%`;
         }
