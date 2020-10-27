@@ -18,6 +18,7 @@
       <template slot-scope="{ items }">
         <BTable
           v-bind="tableProps"
+          ref="tableRef"
           :items="items"
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
@@ -130,6 +131,9 @@ export default {
   watch: {
     columns() {
       this.buildTableColumns();
+      if (this.shouldVirtualScroll) {
+        this.calculateColumnWidths();
+      }
     },
     rows() {
       this.filteredRows = cloneDeep(this.rows);
@@ -182,11 +186,35 @@ export default {
     sortTable(ctx) {
       this.filteredRows = orderBy(this.filteredRows, [ctx.sortBy], [ctx.sortDesc ? 'desc' : 'asc']);
     },
+    calculateColumnWidths() {
+      // Reset layout and width to let table auto-render first
+      this.$refs.tableRef.$el.style.tableLayout = 'auto';
+      this.$refs.tableRef.$el.style.width = '100%';
+
+      // Wait for initial table to render using setTimeout, then set specific widths for each column
+      // Otherwise, column widths can quickly jump around while scrolling leading to less than ideal user experience
+      setTimeout(() => {
+        const headerEls = this.$refs.tableRef.$el.querySelectorAll('thead th');
+        const tableWidth = this.$refs.tableRef.$el.offsetWidth;
+        for (let i = 0; i < headerEls.length; i++) {
+          const headerWidth = headerEls[i].offsetWidth;
+          headerEls[i].style.width = `${(headerWidth / tableWidth) * 100}%`;
+        }
+        // Need to hard-code the full width of the table to still allow horizontal scrolling instead of squishing everything
+        this.$refs.tableRef.$el.style.width = `${tableWidth}px`;
+        // Need to set layout to fixed after hard-coding the widths, otherwise all cols will be equal width
+        this.$refs.tableRef.$el.style.tableLayout = 'fixed';
+      }, 50);
+    },
   },
   mounted() {
     this.filteredRows = cloneDeep(this.rows);
     this.totalRows = this.rows.length;
     this.buildTableColumns();
+
+    if (this.shouldVirtualScroll) {
+      this.calculateColumnWidths();
+    }
   },
 };
 </script>
