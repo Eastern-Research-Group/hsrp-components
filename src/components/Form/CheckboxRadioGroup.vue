@@ -92,6 +92,50 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+// override EPA fieldset styles
+fieldset {
+  position: static;
+  background: inherit;
+  border: inherit;
+  margin: 0 0 0.5em 0;
+  padding: 0;
+
+  & + fieldset {
+    margin-top: 0;
+  }
+
+  legend {
+    // overwrite EPA template legend styles
+    font-family: 'Source Sans Pro', 'Helvetica Neue', 'Helvetica', 'Roboto', 'Arial', sans-serif;
+    font-size: 1em;
+    position: static;
+    background: none;
+    border: none;
+    text-indent: 0;
+    text-shadow: none;
+    color: inherit;
+    line-height: 2;
+  }
+}
+
+.checkbox-radio-list {
+  padding: 0;
+  list-style: none;
+  margin-left: 0.25rem;
+
+  li {
+    display: inline-block;
+  }
+
+  label {
+    font-weight: normal;
+
+    &:not(last-child) {
+      margin-right: 1em;
+    }
+  }
+}
+
 .checkbox-radio-group[readonly] {
   input:not(:checked) + label,
   input:checked + label::before {

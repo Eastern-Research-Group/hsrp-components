@@ -1,6 +1,6 @@
 {
   "name": "hsrp-components",
-  "version": "0.1.27",
+  "version": "0.1.28",
   "scripts": {
     "build": "vue-cli-service build --report --target lib --name hsrp-components ./src/index.js",
     "lint": "vue-cli-service lint",
