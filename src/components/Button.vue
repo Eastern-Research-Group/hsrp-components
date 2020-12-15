@@ -76,5 +76,9 @@ export default {
     cursor: default;
     pointer-events: auto; // allows for "title" tooltip to display on disabled buttons
   }
+
+  .btn-icon {
+    margin-right: 0.2rem;
+  }
 }
 </style>
