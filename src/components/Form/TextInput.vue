@@ -3,6 +3,7 @@
     <label class="label" :for="id">
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
+      <slot />
     </label>
     <VueSelect
       v-if="type === 'vue-select'"
@@ -11,6 +12,14 @@
       :selectable="(option) => !option.group"
       @input="$emit('input', $event)"
     >
+      <template #search="{attributes, events}">
+        <input
+          class="vs__search"
+          :required="required && (!value || (value && value.length === 0))"
+          v-bind="attributes"
+          v-on="events"
+        />
+      </template>
       <template #option="option">
         <div v-if="option.group" class="option-group">
           {{ option.group }}
@@ -53,6 +62,9 @@ export default {
       type: String,
       default: 'text',
     },
+    required: {
+      type: Boolean,
+    },
     placeholder: {
       type: String,
     },
@@ -81,6 +93,7 @@ export default {
         srOnlyLabel: this.srOnlyLabel,
         type: this.type,
         placeholder: this.placeholder,
+        required: this.required,
         min: this.min,
         disabled: this.disabled || (this.type === 'vue-select' && this.readonly),
         readonly: this.readonly,

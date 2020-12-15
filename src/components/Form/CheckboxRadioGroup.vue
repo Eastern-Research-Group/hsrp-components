@@ -14,6 +14,7 @@
           :value="option.value"
           :checked="isChecked(option)"
           :disabled="option.disabled || readonly"
+          :required="type === 'radio' && required"
           @input="emitValueChange"
         />
         <label :for="`${id}_${option.value}`" :title="option.title">{{ option.label }}</label>
@@ -42,6 +43,9 @@ export default {
     type: {
       type: String,
       default: 'checkbox',
+    },
+    required: {
+      type: Boolean,
     },
     readonly: {
       type: Boolean,
@@ -155,5 +159,11 @@ fieldset {
     padding: 0 0.25em;
     color: #333;
   }
+}
+
+// Needed in order to display browser validation message on required radios
+input[type='radio'][required] {
+  left: unset;
+  opacity: 0;
 }
 </style>
