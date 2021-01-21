@@ -22,6 +22,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../styles/variables';
+
 .card-container {
   text-decoration: none;
   color: #1b1b1b;
