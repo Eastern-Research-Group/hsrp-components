@@ -114,7 +114,7 @@ export default {
             options.push({ group: option.group, [labelProp]: null });
             currentGroup = option.group;
           }
-          options.push({ ...option, id: option[labelProp], group: null });
+          options.push({ ...option, group: null });
         });
         return options;
       }
