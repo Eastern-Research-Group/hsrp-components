@@ -48,7 +48,13 @@
       </template>
     </BTable>
 
-    <BPagination v-if="perPage" v-model="currentPage" :total-rows="totalRows" :per-page="perPage" :limit="11" />
+    <div v-if="perPage && totalRows > perPage">
+      <BPagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" :limit="11" />
+      <p class="pagination-text">
+        Displaying {{ (currentPage - 1) * perPage + 1 }} through
+        {{ currentPage * perPage > totalRows ? totalRows : currentPage * perPage }} of {{ totalRows }} records
+      </p>
+    </div>
   </div>
 </template>
 
@@ -220,6 +226,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '../../styles/variables';
+
 .table-container {
   ::v-deep {
     #filter {
@@ -290,7 +298,7 @@ export default {
 
     .b-pagination {
       margin-top: 1rem;
-      display: flex;
+      display: inline-flex;
       padding-left: 0;
       list-style: none;
       border-radius: 0.25rem;
@@ -349,6 +357,12 @@ export default {
       z-index: 99;
       top: -1px;
     }
+  }
+
+  .pagination-text {
+    display: inline-block;
+    margin: auto auto auto 1rem;
+    font-size: 0.93rem;
   }
 }
 </style>
