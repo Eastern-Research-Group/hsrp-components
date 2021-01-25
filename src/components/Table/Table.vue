@@ -1,12 +1,14 @@
 <template>
   <div class="table-container">
-    <TextInput
-      v-if="shouldDisplayFilter"
-      class="text-right"
-      id="filter"
-      label="Search"
-      @input="shouldVirtualScroll ? filterTable($event) : setFilter($event)"
-    />
+    <div class="grid-row">
+      <TextInput
+        v-if="shouldDisplayFilter"
+        class="margin-left-auto margin-bottom-1"
+        id="filter"
+        label="Search"
+        @input="shouldVirtualScroll ? filterTable($event) : setFilter($event)"
+      />
+    </div>
 
     <VirtualScroller
       v-if="shouldVirtualScroll"
@@ -232,10 +234,6 @@ export default {
 
 .table-container {
   ::v-deep {
-    #filter {
-      margin: 0 0 0.5rem 0.5rem;
-    }
-
     .b-table-sticky-header {
       overflow: auto;
 
