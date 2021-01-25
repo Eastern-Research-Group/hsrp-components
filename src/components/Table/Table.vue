@@ -12,7 +12,7 @@
       v-if="shouldVirtualScroll"
       class="v-scroll-container"
       :items="filteredRows"
-      :item-height="columns.length < 8 ? 60 : 150"
+      :item-height="columns.length < 8 ? 60 : 100"
       :style="{ maxHeight: height }"
     >
       <template slot-scope="{ items }">
