@@ -142,7 +142,9 @@ export default {
       }
     },
     rows() {
+      this.currentPage = 1;
       this.filteredRows = cloneDeep(this.rows);
+      this.totalRows = this.filteredRows.length;
     },
   },
   methods: {
