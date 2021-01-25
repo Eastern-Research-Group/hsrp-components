@@ -30,7 +30,9 @@ export default {
     btnStyle: {
       validator(value) {
         // prop value must match one of the following
-        return ['unstyled', 'secondary', 'accent', 'base', 'success', 'outline', 'big'].indexOf(value) !== -1;
+        return (
+          ['default', 'unstyled', 'secondary', 'accent', 'base', 'success', 'outline', 'big'].indexOf(value) !== -1
+        );
       },
     },
   },
@@ -41,7 +43,6 @@ export default {
 @import '../styles/variables';
 
 .usa-button {
-  margin-bottom: 0;
   font-size: inherit;
   font-weight: bold;
 
