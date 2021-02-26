@@ -72,6 +72,10 @@ export default {
       type: Number,
       default: 0,
     },
+    step: {
+      type: String,
+      default: '1',
+    },
     disabled: {
       type: Boolean,
     },
@@ -95,6 +99,7 @@ export default {
         placeholder: this.placeholder,
         required: this.required,
         min: this.min,
+        step: this.step,
         disabled: this.disabled || (this.type === 'vue-select' && this.readonly),
         readonly: this.readonly,
       };
