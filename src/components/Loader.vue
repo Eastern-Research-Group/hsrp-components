@@ -56,6 +56,10 @@
       display: none;
     }
   }
+
+  &.no-label .label {
+    display: none;
+  }
 }
 
 @keyframes spin {
