@@ -3,7 +3,7 @@
     <div class="grid-row">
       <TextInput
         v-if="shouldDisplayFilter"
-        class="margin-left-auto margin-bottom-1"
+        class="table-filter margin-left-auto margin-bottom-1"
         id="filter"
         label="Search"
         @input="shouldVirtualScroll ? filterTable($event) : setFilter($event)"
@@ -13,7 +13,7 @@
     <VirtualScroller
       v-if="shouldVirtualScroll"
       class="v-scroll-container"
-      :items="filteredRows"
+      :items="isServerSide ? rowProvider : filteredRows"
       :item-height="columns.length < 8 ? 60 : 100"
       :style="{ maxHeight: height }"
     >
@@ -31,9 +31,13 @@
     <BTable
       v-else
       v-bind="tableProps"
-      :items="rows"
+      :items="isServerSide ? rowProvider : rows"
+      :busy.sync="isBusy"
+      :current-page.sync="currentPage"
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
+      :api-url.sync="apiUrl"
+      @sort-changed="changeSort"
       @filter="onFiltered"
     >
       <!-- Pass on all named slots -->
@@ -44,9 +48,14 @@
         <slot :name="slot" v-bind="scope" />
       </template>
 
-      <!-- Display loader when table is in busy state -->
-      <template v-slot:table-busy>
-        <Loader />
+      <!-- Display loader when table is empty and in busy state -->
+      <template slot="empty">
+        <div v-if="isBusy" class="text-center">
+          <Loader />
+        </div>
+        <div v-else class="text-center">
+          {{ emptyText }}
+        </div>
       </template>
     </BTable>
 
@@ -79,7 +88,6 @@ export default {
     },
     rows: {
       type: Array,
-      required: true,
     },
     height: {
       type: String,
@@ -106,6 +114,15 @@ export default {
     emptyText: {
       type: String,
     },
+    rowProvider: {
+      type: Function,
+    },
+    apiUrl: {
+      type: String,
+    },
+    total: {
+      type: Number,
+    },
   },
   components: { BTable, BPagination, Loader, TextInput, VirtualScroller },
   data() {
@@ -117,6 +134,7 @@ export default {
       currentPage: 1,
       totalRows: 0,
       filteredRows: [],
+      isBusy: this.busy,
     };
   },
   computed: {
@@ -135,6 +153,9 @@ export default {
         'no-sort-reset': true,
       };
     },
+    isServerSide() {
+      return typeof this.rowProvider === 'function';
+    },
   },
   watch: {
     columns() {
@@ -144,9 +165,14 @@ export default {
       }
     },
     rows() {
-      this.currentPage = 1;
-      this.filteredRows = cloneDeep(this.rows);
-      this.totalRows = this.filteredRows.length;
+      if (this.rows) {
+        this.currentPage = 1;
+        this.filteredRows = cloneDeep(this.rows);
+      }
+      this.totalRows = this.isServerSide ? this.total : this.filteredRows.length;
+    },
+    total() {
+      this.totalRows = this.total;
     },
   },
   methods: {
@@ -193,6 +219,10 @@ export default {
       this.totalRows = filteredItems.length;
       this.currentPage = 1;
     },
+    // Set currentPage to 1 when sorting
+    changeSort() {
+      this.currentPage = 1;
+    },
     sortTable(ctx) {
       this.filteredRows = orderBy(this.filteredRows, [ctx.sortBy], [ctx.sortDesc ? 'desc' : 'asc']);
     },
@@ -219,7 +249,7 @@ export default {
   },
   mounted() {
     this.filteredRows = cloneDeep(this.rows);
-    this.totalRows = this.rows.length;
+    this.totalRows = this.isServerSide ? this.total : this.rows.length;
     this.buildTableColumns();
 
     if (this.shouldVirtualScroll) {
@@ -357,6 +387,10 @@ export default {
       z-index: 99;
       top: -1px;
     }
+  }
+
+  .table-filter ::v-deep label {
+    margin-right: 0.5rem;
   }
 
   .pagination-text {
