@@ -65,7 +65,6 @@ export default {
 .card-content {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   height: 100%;
   font-size: size('body', '2xs');
   padding: 1rem;
