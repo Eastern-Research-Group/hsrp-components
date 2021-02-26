@@ -1,5 +1,11 @@
 <template>
-  <div :class="`usa-alert usa-alert--${type} ${validation ? 'usa-alert--validation' : ''}`" role="alert" tabindex="0">
+  <div
+    :class="
+      `usa-alert usa-alert--${type} ${validation ? 'usa-alert--validation' : ''} ${slim ? 'usa-alert--slim' : ''}`
+    "
+    role="alert"
+    tabindex="0"
+  >
     <div class="usa-alert__body">
       <h3 v-if="header" class="usa-alert__heading">{{ header }}</h3>
       <p v-if="text" class="usa-alert__text">{{ text }}</p>
@@ -30,6 +36,10 @@ export default {
       type: Boolean,
       required: false,
     },
+    slim: {
+      type: Boolean,
+      required: false,
+    },
   },
 };
 </script>
@@ -40,6 +50,7 @@ export default {
 .usa-alert {
   margin: 1rem 0;
   font-size: 1rem;
+  background-position: 1.5rem;
 
   ul {
     padding-left: 1.5rem;
