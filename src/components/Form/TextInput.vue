@@ -4,6 +4,7 @@
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
       <slot />
+      <Tooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip"></Tooltip>
     </label>
     <VueSelect
       v-if="type === 'vue-select'"
@@ -41,6 +42,7 @@
 <script>
 import VueSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+import Tooltip from '../Tooltip.vue';
 
 export default {
   props: {
@@ -82,12 +84,15 @@ export default {
     readonly: {
       type: Boolean,
     },
+    tooltip: {
+      type: String,
+    },
     vueSelectProps: {
       type: Object,
       default: () => ({}),
     },
   },
-  components: { VueSelect },
+  components: { Tooltip, VueSelect },
   computed: {
     inputProps() {
       return {
