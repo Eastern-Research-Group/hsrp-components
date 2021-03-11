@@ -7,5 +7,6 @@ import Loader from './Loader.vue';
 import Modal from './Modal.vue';
 import Table from './Table/Table.vue';
 import TextInput from './Form/TextInput.vue';
+import Tooltip from './Tooltip.vue';
 
-export { Alert, Button, Card, Checkbox, CheckboxRadioGroup, Loader, Modal, Table, TextInput };
+export { Alert, Button, Card, Checkbox, CheckboxRadioGroup, Loader, Modal, Table, TextInput, Tooltip };
