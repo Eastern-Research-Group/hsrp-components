@@ -25,7 +25,25 @@
           :sort-by.sync="sortBy"
           :sort-desc.sync="sortDesc"
           @sort-changed="sortTable"
-        />
+        >
+          <!-- Pass on all named slots -->
+          <slot v-for="slot in Object.keys($slots)" :name="slot" :slot="slot" />
+
+          <!-- Pass on all scoped slots -->
+          <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
+            <slot :name="slot" v-bind="scope" />
+          </template>
+
+          <!-- Display loader when table is empty and in busy state -->
+          <template slot="empty">
+            <div v-if="isBusy" class="text-center">
+              <Loader />
+            </div>
+            <div v-else class="text-center">
+              {{ emptyText }}
+            </div>
+          </template>
+        </BTable>
       </template>
     </VirtualScroller>
     <BTable
@@ -174,6 +192,9 @@ export default {
     total() {
       this.totalRows = this.total;
     },
+    busy() {
+      this.isBusy = this.busy;
+    },
   },
   methods: {
     buildTableColumns() {
@@ -191,6 +212,8 @@ export default {
           label: col.label || col.key,
           tdClass: col.tdClass || 'text-center',
           sortable: col.sortable !== undefined ? col.sortable : true,
+          headerTitle: col.headerTitle,
+          thAttr: { id: `tooltip-${col.key}` },
         };
       });
     },
