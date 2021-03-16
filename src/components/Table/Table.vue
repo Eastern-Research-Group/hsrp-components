@@ -300,7 +300,7 @@ export default {
 
     .b-table {
       width: 100%;
-      font-size: 0.95rem;
+      font-size: size('sans', '2xs');
       border-collapse: separate;
       border-spacing: 0;
 
