@@ -47,7 +47,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .tooltip-label {
   text-decoration: none;
   border-bottom: 1px dashed color('base-darker');

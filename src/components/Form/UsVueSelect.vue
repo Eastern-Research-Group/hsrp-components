@@ -1,15 +1,15 @@
 <template>
-  <div class="input-container">
-    <label class="label" :for="id">
+  <div :class="`usa-form-group ${errorMessage ? 'usa-form-group--error' : ''}`">
+    <label :for="id" :class="`usa-label ${!label && srOnlyLabel ? 'sr-only' : ''}`">
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
-      <slot />
+      <slot name="label"></slot>
       <UsTooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
     </label>
+    <span v-if="errorMessage" class="usa-error-message">{{ errorMessage }}</span>
     <VueSelect
-      v-if="type === 'vue-select'"
       class="input"
-      v-bind="{ ...inputProps, ...vueSelectProps, options: vueSelectOptions }"
+      v-bind="{ ...inputProps, ...vueSelectProps, inputId: id, options: vueSelectOptions }"
       :selectable="(option) => !option.group"
       @input="$emit('input', $event)"
     >
@@ -29,13 +29,6 @@
       </template>
       <span slot="no-options" class="no-options-msg">{{ vueSelectProps.noOptionsMsg || 'No matching options.' }}</span>
     </VueSelect>
-    <textarea
-      v-else-if="type === 'textarea'"
-      class="input"
-      v-bind="inputProps"
-      @input="$emit('input', $event)"
-    ></textarea>
-    <input v-else class="input" v-bind="inputProps" @input="$emit('input', $event)" />
   </div>
 </template>
 
@@ -45,26 +38,28 @@ import 'vue-select/dist/vue-select.css';
 import UsTooltip from '../UsTooltip.vue';
 
 export default {
+  components: { UsTooltip, VueSelect },
   props: {
     id: {
       type: String,
       required: true,
     },
-    value: {
-      type: [String, Number, Array, Object],
-    },
     label: {
       type: String,
-      required: true,
     },
     srOnlyLabel: {
       type: String,
     },
-    type: {
-      type: String,
-      default: 'text',
+    value: {
+      type: [String, Number, Array, Object],
     },
     required: {
+      type: Boolean,
+    },
+    disabled: {
+      type: Boolean,
+    },
+    readonly: {
       type: Boolean,
     },
     placeholder: {
@@ -74,17 +69,21 @@ export default {
       type: Number,
       default: 0,
     },
+    max: {
+      type: Number,
+    },
     step: {
       type: String,
-      default: '1',
+      default: 'any',
     },
-    disabled: {
+    isTextArea: {
       type: Boolean,
-    },
-    readonly: {
-      type: Boolean,
+      default: false,
     },
     tooltip: {
+      type: String,
+    },
+    errorMessage: {
       type: String,
     },
     vueSelectProps: {
@@ -92,7 +91,6 @@ export default {
       default: () => ({}),
     },
   },
-  components: { UsTooltip, VueSelect },
   computed: {
     inputProps() {
       return {
@@ -100,20 +98,19 @@ export default {
         value: this.value,
         label: this.label,
         srOnlyLabel: this.srOnlyLabel,
-        type: this.type,
         placeholder: this.placeholder,
         required: this.required,
         min: this.min,
         step: this.step,
-        disabled: this.disabled || (this.type === 'vue-select' && this.readonly),
+        disabled: this.disabled || this.readonly,
         readonly: this.readonly,
       };
     },
     // Logic to allow for header groups within options list
     // "group" must be added to all options passed to this component, and must be pre-sorted in order by group
     vueSelectOptions() {
-      // No need to run if input is not vue-select
-      if (this.type !== 'vue-select' || !this.vueSelectProps.options) return [];
+      // No need to run if no options are passed
+      if (!this.vueSelectProps.options) return [];
 
       const labelProp = this.vueSelectProps.label || 'label';
       if (this.vueSelectProps.options.filter((option) => !!option.group).length > 0) {
@@ -133,15 +130,10 @@ export default {
   },
 };
 </script>
-<style lang="scss" scoped>
-.input {
-  padding: 0.25rem;
 
-  &[readonly] {
-    color: #222;
-    border: none;
-    background: none;
-  }
+<style lang="scss" scoped>
+.usa-label {
+  margin-top: 1.25rem;
 }
 
 // Vue-Select input styles
@@ -157,8 +149,10 @@ export default {
   }
 
   .vs__dropdown-toggle {
+    height: auto;
+    min-height: 2.25rem;
     border-radius: 0;
-    border-color: rgb(169, 169, 169);
+    border-color: #565c65;
     margin-bottom: 0.5em;
     padding: 0;
   }
