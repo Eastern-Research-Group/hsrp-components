@@ -81,5 +81,10 @@ export default {
   .btn-icon {
     margin-right: 0.2rem;
   }
+
+  &:not([disabled]):focus,
+  &:not([disabled]).usa-focus {
+    outline-offset: 2px;
+  }
 }
 </style>
