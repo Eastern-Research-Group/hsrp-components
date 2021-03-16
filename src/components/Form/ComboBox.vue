@@ -4,7 +4,7 @@
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
       <slot name="label"></slot>
-      <UsTooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
+      <Tooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
     </label>
     <div class="usa-combo-box">
       <select class="usa-select" name="fruit" id="fruit">
@@ -19,10 +19,11 @@
 
 <script>
 import comboBox from 'uswds/src/js/components/combo-box';
-import UsTooltip from '../UsTooltip.vue';
+import Tooltip from '../Tooltip.vue';
 
 export default {
-  components: { UsTooltip },
+  name: 'ComboBoxUs',
+  components: { Tooltip },
   props: {
     id: {
       type: String,

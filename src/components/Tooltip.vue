@@ -14,6 +14,7 @@
 import { BTooltip } from 'bootstrap-vue';
 
 export default {
+  name: 'Tooltip',
   props: {
     id: {
       type: String,

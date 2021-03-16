@@ -1,61 +1,38 @@
 <template>
-  <div class="input-container">
-    <label class="label" :for="id">
+  <div :class="`usa-form-group ${errorMessage ? 'usa-form-group--error' : ''}`">
+    <label :for="id" :class="`usa-label ${!label && srOnlyLabel ? 'sr-only' : ''}`">
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
-      <slot />
-      <UsTooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
+      <slot name="label"></slot>
+      <Tooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
     </label>
-    <VueSelect
-      v-if="type === 'vue-select'"
-      class="input"
-      v-bind="{ ...inputProps, ...vueSelectProps, options: vueSelectOptions }"
-      :selectable="(option) => !option.group"
-      @input="$emit('input', $event)"
-    >
-      <template #search="{attributes, events}">
-        <input
-          class="vs__search"
-          :required="required && (!value || (value && value.length === 0))"
-          v-bind="attributes"
-          v-on="events"
-        />
-      </template>
-      <template #option="option">
-        <div v-if="option.group" class="option-group">
-          {{ option.group }}
-        </div>
-        {{ option[vueSelectProps.label || inputProps.label || 'label'] }}
-      </template>
-      <span slot="no-options" class="no-options-msg">{{ vueSelectProps.noOptionsMsg || 'No matching options.' }}</span>
-    </VueSelect>
+    <span v-if="errorMessage" class="usa-error-message">{{ errorMessage }}</span>
+
     <textarea
-      v-else-if="type === 'textarea'"
-      class="input"
-      v-bind="inputProps"
-      @input="$emit('input', $event)"
-    ></textarea>
-    <input v-else class="input" v-bind="inputProps" @input="$emit('input', $event)" />
+      v-if="isTextArea"
+      class="usa-textarea"
+      :id="id"
+      v-bind="{ ...$props, ...$attrs }"
+      ref="textarea"
+      @input="updateValue"
+    />
+    <input v-else class="usa-input" :name="id" v-bind="{ ...$props, ...$attrs }" @input="updateValue" />
   </div>
 </template>
 
 <script>
-import VueSelect from 'vue-select';
-import 'vue-select/dist/vue-select.css';
-import UsTooltip from '../UsTooltip.vue';
+import Tooltip from '../Tooltip.vue';
 
 export default {
+  name: 'TextInputUs',
+  components: { Tooltip },
   props: {
     id: {
       type: String,
       required: true,
     },
-    value: {
-      type: [String, Number, Array, Object],
-    },
     label: {
       type: String,
-      required: true,
     },
     srOnlyLabel: {
       type: String,
@@ -64,7 +41,16 @@ export default {
       type: String,
       default: 'text',
     },
+    value: {
+      type: [String, Number],
+    },
     required: {
+      type: Boolean,
+    },
+    disabled: {
+      type: Boolean,
+    },
+    readonly: {
       type: Boolean,
     },
     placeholder: {
@@ -74,141 +60,58 @@ export default {
       type: Number,
       default: 0,
     },
+    max: {
+      type: Number,
+    },
     step: {
       type: String,
-      default: '1',
+      default: 'any',
     },
-    disabled: {
+    isTextArea: {
       type: Boolean,
-    },
-    readonly: {
-      type: Boolean,
+      default: false,
     },
     tooltip: {
       type: String,
     },
-    vueSelectProps: {
-      type: Object,
-      default: () => ({}),
+    errorMessage: {
+      type: String,
     },
   },
-  components: { UsTooltip, VueSelect },
-  computed: {
-    inputProps() {
-      return {
-        id: this.id,
-        value: this.value,
-        label: this.label,
-        srOnlyLabel: this.srOnlyLabel,
-        type: this.type,
-        placeholder: this.placeholder,
-        required: this.required,
-        min: this.min,
-        step: this.step,
-        disabled: this.disabled || (this.type === 'vue-select' && this.readonly),
-        readonly: this.readonly,
-      };
+  methods: {
+    updateValue(event) {
+      this.$emit('input', event.target.value);
     },
-    // Logic to allow for header groups within options list
-    // "group" must be added to all options passed to this component, and must be pre-sorted in order by group
-    vueSelectOptions() {
-      // No need to run if input is not vue-select
-      if (this.type !== 'vue-select' || !this.vueSelectProps.options) return [];
-
-      const labelProp = this.vueSelectProps.label || 'label';
-      if (this.vueSelectProps.options.filter((option) => !!option.group).length > 0) {
-        let currentGroup = this.vueSelectProps.options[0].group;
-        const options = [{ group: currentGroup, [labelProp]: null }];
-        this.vueSelectProps.options.forEach((option) => {
-          if (option.group !== currentGroup) {
-            options.push({ group: option.group, [labelProp]: null });
-            currentGroup = option.group;
-          }
-          options.push({ ...option, group: null });
-        });
-        return options;
-      }
-      return this.vueSelectProps.options;
-    },
+  },
+  mounted() {
+    // If readonly is set, set textarea to height of content so user doesn't have to resize
+    if (this.isTextArea && this.readonly) {
+      this.$refs.textarea.style.height = '0';
+      this.$refs.textarea.style.height = `${this.$refs.textarea.scrollHeight}px`;
+      this.$refs.textarea.style.resize = 'none';
+    }
   },
 };
 </script>
-<style lang="scss" scoped>
-.input {
-  padding: 0.25rem;
 
-  &[readonly] {
-    color: #222;
-    border: none;
-    background: none;
-  }
+<style lang="scss" scoped>
+.usa-label {
+  margin-top: 1.25rem;
 }
 
-// Vue-Select input styles
-::v-deep .v-select {
+.usa-input[readonly] {
+  height: 1.25rem;
+}
+
+.usa-textarea[readonly] {
+  height: 2.5rem;
+}
+
+.usa-textarea[readonly],
+.usa-input[readonly] {
   padding: 0;
-
-  ::placeholder {
-    color: #999;
-  }
-
-  .vs__clear {
-    margin-bottom: 0;
-  }
-
-  .vs__dropdown-toggle {
-    border-radius: 0;
-    border-color: rgb(169, 169, 169);
-    margin-bottom: 0.5em;
-    padding: 0;
-  }
-
-  .vs__deselect {
-    margin: 0 0.2rem 0 0.4rem;
-  }
-
-  .vs__search {
-    width: inherit;
-    padding: 0 5px;
-    margin: 0;
-
-    &:focus {
-      margin: 0;
-    }
-  }
-
-  &.vs--single .vs__selected {
-    max-width: calc(100% - 14px);
-
-    & + .vs__search {
-      width: 0;
-    }
-  }
-
-  .vs__selected {
-    margin: 2px 2px 2px;
-  }
-
-  .option-group {
-    font-weight: bold;
-    color: #222;
-    margin-left: -0.5rem;
-  }
-
-  &[readonly] .vs__dropdown-toggle {
-    border: none;
-    background: none;
-
-    .vs__selected,
-    .vs__selected:hover {
-      cursor: text;
-    }
-
-    input,
-    .vs__actions,
-    .vs__selected button {
-      display: none;
-    }
-  }
+  color: #222;
+  border: none;
+  background: none;
 }
 </style>

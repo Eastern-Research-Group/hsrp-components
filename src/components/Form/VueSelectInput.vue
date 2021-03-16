@@ -4,7 +4,7 @@
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
       <slot name="label"></slot>
-      <UsTooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
+      <Tooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
     </label>
     <span v-if="errorMessage" class="usa-error-message">{{ errorMessage }}</span>
     <VueSelect
@@ -35,10 +35,11 @@
 <script>
 import VueSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
-import UsTooltip from '../UsTooltip.vue';
+import Tooltip from '../Tooltip.vue';
 
 export default {
-  components: { UsTooltip, VueSelect },
+  name: 'VueSelectInput',
+  components: { Tooltip, VueSelect },
   props: {
     id: {
       type: String,
@@ -153,6 +154,7 @@ export default {
     min-height: 2.25rem;
     border-radius: 0;
     border-color: #565c65;
+    margin-top: 0.25rem;
     margin-bottom: 0.5em;
     padding: 0;
   }
