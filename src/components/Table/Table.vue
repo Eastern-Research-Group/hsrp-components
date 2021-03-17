@@ -412,8 +412,17 @@ export default {
     }
   }
 
-  .table-filter ::v-deep label {
-    margin-right: 0.5rem;
+  .table-filter ::v-deep {
+    .usa-label {
+      margin-right: 0.5rem;
+      display: inline-block;
+    }
+
+    .usa-input {
+      display: inline-block;
+      width: 200px;
+      margin-top: 0;
+    }
   }
 
   .pagination-text {
