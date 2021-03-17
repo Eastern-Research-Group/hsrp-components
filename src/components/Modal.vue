@@ -1,9 +1,9 @@
 <template>
-  <div class="modal-container" @click="closeFnc">
+  <div class="modal-container" @click="closeFnc ? closeFnc : () => {}">
     <div class="modal" :style="customStyle" @click.stop @keydown.esc="closeFnc" role="dialog">
       <div class="modal-header">
         <span>{{ header }}</span>
-        <Button class="close-btn" btnStyle="unstyled" icon="times" @click="closeFnc" />
+        <Button v-if="closeFnc" class="close-btn" btnStyle="unstyled" icon="times" @click="closeFnc" />
       </div>
       <div class="modal-content">
         <slot />
@@ -22,7 +22,6 @@ export default {
     },
     closeFnc: {
       type: Function,
-      required: true,
     },
     customStyle: {
       type: Object,
@@ -54,15 +53,14 @@ export default {
     this.focusableEls = Array.from(
       document.querySelector('.modal-content').querySelectorAll('input, button, select, textarea, [href]')
     );
-    this.focusableEls.push(document.querySelector('.close-btn'));
+    if (this.closeFnc) {
+      this.focusableEls.push(document.querySelector('.close-btn'));
+    }
 
     // Set custom tab indices so that the close button is focused last, after modal content inputs
     this.focusableEls.forEach((el, index) => {
       el.tabIndex = index + 1; // eslint-disable-line no-param-reassign
     });
-
-    // Focus on first focusable element
-    this.focusableEls[0].focus();
 
     // Add event listener for accessible focus
     document.addEventListener('keydown', this.handleFocus);
@@ -96,6 +94,10 @@ export default {
   border-radius: 3px;
   max-width: 90%;
   overflow: auto;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .modal-header {
