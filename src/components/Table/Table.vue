@@ -55,8 +55,8 @@
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       :api-url.sync="apiUrl"
+      :filter.sync="filter"
       @sort-changed="changeSort"
-      @filter="onFiltered"
     >
       <!-- Pass on all named slots -->
       <slot v-for="slot in Object.keys($slots)" :name="slot" :slot="slot" />
@@ -68,16 +68,20 @@
 
       <!-- Display loader when table is empty and in busy state -->
       <template slot="empty">
-        <div v-if="isBusy" class="text-center">
-          <Loader />
+        <div class="margin-top-2 text-center" style="max-width:60rem;height:410px">
+          <Loader v-if="isBusy" />
+          <p v-else>{{ emptyText }}</p>
         </div>
-        <div v-else class="text-center">
-          {{ emptyText }}
+      </template>
+      <template slot="emptyfiltered">
+        <div class="margin-top-2 text-center" style="max-width:60rem;height:410px">
+          <Loader v-if="isBusy" />
+          <p v-else>{{ emptyText }}</p>
         </div>
       </template>
     </BTable>
 
-    <div v-if="perPage && totalRows > perPage">
+    <div v-if="perPage">
       <BPagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" :limit="11" />
       <p class="pagination-text">
         Displaying {{ (currentPage - 1) * perPage + 1 }} through
@@ -131,6 +135,7 @@ export default {
     },
     emptyText: {
       type: String,
+      default: 'No data to display.',
     },
     rowProvider: {
       type: Function,
@@ -141,6 +146,9 @@ export default {
     total: {
       type: Number,
     },
+    tableFilter: {
+      type: String,
+    },
   },
   components: { BTable, BPagination, Loader, TextInput, VirtualScroller },
   data() {
@@ -148,7 +156,8 @@ export default {
       sortBy: this.defaultSort || '',
       sortDesc: false,
       tableColumns: [],
-      filter: '',
+      pendingFilter: '',
+      filter: this.tableFilter || '',
       currentPage: 1,
       totalRows: 0,
       filteredRows: [],
@@ -163,7 +172,6 @@ export default {
         busy: this.busy,
         'current-page': this.currentPage,
         'per-page': this.perPage,
-        filter: this.filter,
         striped: true,
         responsive: !this.shouldVirtualScroll,
         'empty-text': this.emptyText,
@@ -194,6 +202,10 @@ export default {
     },
     busy() {
       this.isBusy = this.busy;
+    },
+    tableFilter() {
+      this.currentPage = 1;
+      this.filter = this.tableFilter;
     },
   },
   methods: {
@@ -350,6 +362,8 @@ export default {
     }
 
     .b-pagination {
+      max-width: 100%;
+      overflow-x: auto;
       margin-top: 1rem;
       display: inline-flex;
       padding-left: 0;
