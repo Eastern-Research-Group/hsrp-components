@@ -14,7 +14,7 @@
       v-if="shouldVirtualScroll"
       class="v-scroll-container"
       :items="isServerSide ? rowProvider : filteredRows"
-      :item-height="columns.length < 8 ? 60 : 100"
+      :item-height="rowHeight ? rowHeight : columns.length < 8 ? 60 : 100"
       :style="{ maxHeight: height }"
     >
       <template slot-scope="{ items }">
@@ -68,13 +68,13 @@
 
       <!-- Display loader when table is empty and in busy state -->
       <template slot="empty">
-        <div class="margin-top-2 text-center" style="max-width:60rem;height:410px">
-          <Loader v-if="isBusy" />
+        <div class="margin-top-1 text-center" style="max-width:60rem">
+          <Loader v-if="isBusy" style="height:410px" />
           <p v-else>{{ emptyText }}</p>
         </div>
       </template>
       <template slot="emptyfiltered">
-        <div class="margin-top-2 text-center" style="max-width:60rem;height:410px">
+        <div class="margin-top-1 text-center" style="max-width:60rem;height:410px">
           <Loader v-if="isBusy" />
           <p v-else>{{ emptyText }}</p>
         </div>
@@ -114,6 +114,9 @@ export default {
     height: {
       type: String,
       default: '500px',
+    },
+    rowHeight: {
+      type: Number,
     },
     defaultSort: {
       type: String,
