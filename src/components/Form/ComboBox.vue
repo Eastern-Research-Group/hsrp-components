@@ -7,7 +7,7 @@
       <Tooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
     </label>
     <div class="usa-combo-box">
-      <select class="usa-select" name="fruit" id="fruit">
+      <select class="usa-select" :name="id" :id="id">
         <option value>{{ placeholder }}</option>
         <option v-for="option in optionObjects" :key="option.value" :value="option.value">
           {{ option.label }}
