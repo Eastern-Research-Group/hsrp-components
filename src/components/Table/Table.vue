@@ -6,6 +6,7 @@
         class="table-filter margin-left-auto margin-bottom-1"
         id="filter"
         label="Search"
+        :value="filter"
         @input="shouldVirtualScroll ? filterTable($event) : setFilter($event)"
       />
     </div>
@@ -233,8 +234,8 @@ export default {
       });
     },
     /* eslint-disable func-names */
-    setFilter: debounce(function(e) {
-      this.filter = e.target.value;
+    setFilter: debounce(function(value) {
+      this.filter = value;
     }, 500),
     filterTable: debounce(function(e) {
       // need to re-clone the object for when the user deletes filter term
