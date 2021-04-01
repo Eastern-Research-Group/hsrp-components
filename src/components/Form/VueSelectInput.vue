@@ -10,7 +10,7 @@
     <VueSelect
       class="input"
       v-bind="{ ...inputProps, ...vueSelectProps, inputId: id, options: vueSelectOptions }"
-      :selectable="(option) => !option.group"
+      :selectable="(option) => (areGroupsSelectable ? true : !option.group)"
       @input="$emit('input', $event)"
     >
       <template #search="{attributes, events}">
@@ -22,10 +22,11 @@
         />
       </template>
       <template #option="option">
-        <div v-if="option.group" class="option-group">
+        <span v-if="option.group" class="option-group">
           {{ option.group }}
-        </div>
+        </span>
         {{ option[vueSelectProps.label || inputProps.label || 'label'] }}
+        {{ option.append }}
       </template>
       <span slot="no-options" class="no-options-msg">{{ vueSelectProps.noOptionsMsg || 'No matching options.' }}</span>
     </VueSelect>
@@ -90,6 +91,10 @@ export default {
     vueSelectProps: {
       type: Object,
       default: () => ({}),
+    },
+    areGroupsSelectable: {
+      type: Boolean,
+      default: false,
     },
   },
   computed: {
@@ -187,8 +192,11 @@ export default {
 
   .option-group {
     font-weight: bold;
-    color: #222;
     margin-left: -0.5rem;
+  }
+
+  .vs__dropdown-option--disabled {
+    color: #222;
   }
 
   &[readonly] .vs__dropdown-toggle {
