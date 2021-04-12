@@ -9,10 +9,13 @@
     <span v-if="icon" :class="`btn-icon fa fa-${icon} ${label ? 'margin-right-05' : ''}`"></span>
     {{ label }}
     <slot />
+    <Loader v-if="isBusy" class="inline" />
   </button>
 </template>
 
 <script>
+import Loader from './Loader.vue';
+
 export default {
   name: 'Button',
   props: {
@@ -35,7 +38,12 @@ export default {
         );
       },
     },
+    isBusy: {
+      type: Boolean,
+      default: false,
+    },
   },
+  components: { Loader },
 };
 </script>
 
