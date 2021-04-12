@@ -224,11 +224,11 @@ export default {
           };
         }
         return {
+          ...col,
           key: col.key,
           label: col.label || col.key,
           tdClass: col.tdClass || 'text-center',
           sortable: col.sortable !== undefined ? col.sortable : true,
-          headerTitle: col.headerTitle,
           thAttr: { id: `tooltip-${col.key}` },
         };
       });
