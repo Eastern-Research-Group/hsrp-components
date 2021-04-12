@@ -100,7 +100,6 @@ export default {
   computed: {
     inputProps() {
       return {
-        id: this.id,
         value: this.value,
         label: this.label,
         srOnlyLabel: this.srOnlyLabel,
