@@ -97,7 +97,6 @@ export default {
 
   .option-group {
     font-weight: bold;
-    color: #222;
     margin-left: -0.5rem;
   }
 
