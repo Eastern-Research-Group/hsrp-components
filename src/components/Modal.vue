@@ -1,6 +1,6 @@
 <template>
-  <div class="modal-container" @click="closeFnc ? closeFnc : () => {}">
-    <div class="modal" :style="customStyle" @click.stop @keydown.esc="closeFnc" role="dialog">
+  <div class="modal-container" @click="typeof closeFnc === 'function' ? closeFnc() : () => {}">
+    <div class="modal" :style="customStyle" @click.stop role="dialog">
       <div class="modal-header">
         <span>{{ header }}</span>
         <Button v-if="closeFnc" class="close-btn" btnStyle="unstyled" icon="times" @click="closeFnc" />
