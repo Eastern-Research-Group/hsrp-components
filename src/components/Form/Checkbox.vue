@@ -10,7 +10,7 @@
         :disabled="disabled"
         @change="$emit('change', $event)"
       />
-      <label :class="`usa-checkbox__label ${!label && srOnlyLabel ? 'margin-top-0' : ''}`" :for="id">
+      <label :id="labelId" :class="`usa-checkbox__label ${!label && srOnlyLabel ? 'margin-top-0' : ''}`" :for="id">
         <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
         {{ label }}
         <slot name="label"></slot>
@@ -26,6 +26,9 @@ export default {
     id: {
       type: String,
       required: true,
+    },
+    labelId: {
+      type: String,
     },
     value: {
       type: [String, Number],
