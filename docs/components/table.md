@@ -24,4 +24,13 @@ Code:
 
 ### Columns Array
 
+**hideOnBreakpoint**
+
+Add hideOnBreakpoint prop to field object to hide specific columns depending on screen size. Currently available breakpoints (following USWDS) are below. Use the screen type as the value of hideOnBreakpoint, e.g. `hideOnBreakpoint: 'tablet'`
+
+* `desktop-lg` - 1200px
+* `desktop` - 1040px
+* `tablet-lg` - 800px
+* `tablet` - 640px
+
 See the [Bootstrap-Vue Table fields documentation](https://bootstrap-vue.js.org/docs/components/table/#fields-column-definitions) for how to build the field objects.

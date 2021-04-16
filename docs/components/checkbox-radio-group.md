@@ -2,6 +2,44 @@
 
 A group of checkbox or radio button inputs
 
+## Example
+
+```vue
+<CheckboxRadioGroup
+    id="radioGroup"
+    label="Radio Group"
+    type="radio"
+    :options="[
+        { value: 'option1', label: 'Option 1' },
+        { value: 'option2', label: 'Option 2' },
+        {
+            value: 'option3',
+            label: 'Option 3',
+            disabled: true,
+            title: 'This option is disabled.',
+        },
+    ]"
+    v-model="radioGroup"
+/>
+```
+
+<CheckboxRadioGroup
+    id="radioGroup"
+    label="Radio Group"
+    type="radio"
+    :options="[
+        { value: 'option1', label: 'Option 1' },
+        { value: 'option2', label: 'Option 2' },
+        {
+        value: 'option3',
+        label: 'Option 3',
+        disabled: true,
+        title: 'This option is disabled.',
+        },
+    ]"
+/>
+
+
 ## Props
 
 \*Required

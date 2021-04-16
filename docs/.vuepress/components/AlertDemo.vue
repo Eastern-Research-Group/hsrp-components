@@ -7,7 +7,8 @@
       <option value="error">Error</option>
       <option value="success">Success</option>
     </select>
-    <Alert :type="type" :text="`This is a ${type} alert.`" />
+    <input id="slim" class="margin-left-2" type="checkbox" v-model="slim"><label for="slim" class="margin-left-1">Slim Style</label>
+    <Alert :type="type" :text="`This is a ${type} alert.`" :slim="slim" />
   </div>
 </template>
 
@@ -16,6 +17,7 @@ export default {
   data() {
     return {
       type: 'info',
+      slim: false,
     };
   },
 };

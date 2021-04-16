@@ -15,6 +15,7 @@ Displays an alert icon and message. The icon and colors change depending on the 
 | text       | String  | Message inside the alert.                          |         |
 | header     | String  | Header above the alert message.                    |         |
 | validation | Boolean | Updates styling to use as form validation message. |         |
+| slim       | Boolean | Makes the alert slimmer and take up less space.    | false   |
 
 ## Slots
 

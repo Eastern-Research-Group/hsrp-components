@@ -9,7 +9,7 @@
 
 | Name     |  Type  | Description                                                                                      | Default |
 | -------- | :----: | ------------------------------------------------------------------------------------------------ | ------- |
-| btnStyle | String |                                                                                                  |         |
+| btnStyle | String | USWDS-based styles. Options include: unstyled, base, outline, secondary, accent-cool, big        |         |
 | icon     | String | Font-awesome icon (without "fa-" prefix) to display inside the button, to the left of the label. |         |
 | label    | String | Message inside the button.                                                                       |         |
 | type     | String | Button type attribute (e.g. "submit", "button")                                                  | button  |

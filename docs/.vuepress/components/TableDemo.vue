@@ -1,6 +1,6 @@
 <template>
   <div class="margin-top-2">
-    <Table :columns="columns" :rows="rows" :shouldDisplayFilter="true" >
+    <Table :columns="columns" :rows="rows" :shouldDisplayFilter="true" breakpoint="680px" >
       <!-- Custom cell render slot -->
       <template v-slot:cell(Column5)="data">
         <a href="#">{{ data.value }}</a>
@@ -24,8 +24,8 @@ export default {
     return {
       columns: [
         { key: 'Column1', label: 'Left Column', tdClass: 'text-left' },
-        { key: 'Column2', label: 'Center Column' },
-        { key: 'Column3', label: 'Right Column', tdClass: 'text-right' },
+        { key: 'Column2', label: 'Center Column', hideOnBreakpoint: 'tablet-lg' },
+        { key: 'Column3', label: 'Right Column', tdClass: 'text-right', hideOnBreakpoint: 'desktop' },
         { key: 'Column4', label: 'Sort-Disabled Column', sortable: false },
         { key: 'Column5', label: 'Custom Cell Render' },
         { key: 'Column6', label: 'Drilldown', sortable: false },
