@@ -1,0 +1,66 @@
+{
+  "alert": {
+    "attributes": ["type", "text", "header", "validation", "slim"],
+    "defaults": ["type"],
+    "description": "Alert message"
+  },
+  "Button": {
+    "attributes": ["btnStyle", "icon", "label", "title", "type", "disabled", "isBusy"],
+    "defaults": ["btnStyle"],
+    "description": "Button"
+  },
+  "Card": {
+    "attributes": ["header", "icon", "isHyperlink", "hyperlinkPath"],
+    "defaults": ["header"],
+    "description": "Card/box component with header area and content"
+  },
+  "Checkbox": {
+    "attributes": ["id", "labelId", "value", "checked", "disabled", "label", "srOnlyLabel"],
+    "defaults": ["id", "label", ":value"],
+    "description": "Single checkbox form input"
+  },
+  "CheckboxRadioGroup": {
+    "attributes": ["id", "value", "label", "srOnlyLabel", "type", "required", "readonly", "options", "isInline"],
+    "defaults": ["id", "label", "options", "v-model"],
+    "description": "Group of related checkbox or radio inputs"
+  },
+  "ComboBox": {
+    "attributes": ["id", "value", "label", "srOnlyLabel", "required", "disabled", "placeholder", "tooltip", "readonly", "options", "isInline", "errorMessage"],
+    "defaults": ["id", "label", "options", "v-model"],
+    "description": "Combobox/select input from US Web Design System"
+  },
+  "Loader": {
+    "attributes": [],
+    "description": "Spinning loading indicator"
+  },
+  "Modal": {
+    "attributes": ["header", "closeFnc", "customStyle"],
+    "defaults": ["header", ":closeFnc"],
+    "description": "Modal"
+  },
+  "SideNav": {
+    "attributes": ["title"],
+    "defaults": [":items"],
+    "description": "Side navigation with up to three levels of links"
+  },
+  "Table": {
+    "attributes": ["columns", "rows", "height", "rowHeight", "defaultSort", "busy", "perPage", "shouldDisplayFilter", "shouldVirtualScroll", "emptyText", "rowProvider", "apiUrl", "total", "tableFilter"],
+    "defaults": ["columns", "rows"],
+    "description": "Sortable, filterable, paginating table based on BootstrapVue table"
+  },
+  "TextInput": {
+    "attributes": ["id", "label", "srOnlyLabel", "type", "value", "required", "disabled", "readonly", "placeholder", "min", "max", "step", "isTextArea", "tooltip", "errorMessage"],
+    "defaults": ["id", "label", "v-model"],
+    "description": "Text or textarea form input"
+  },
+  "Tooltip": {
+    "attributes": ["id", "label", "description", "placement", "tooltipOnly", "iconOnly", "triggers"],
+    "defaults": ["id", "description"],
+    "description": "Tooltip to display descriptive text on hover/focus"
+  },
+  "VueSelectInput": {
+    "attributes":  ["id", "label", "srOnlyLabel", "value", "required", "disabled", "readonly", "placeholder", "tooltip", "errorMessage", "vueSelectProps", "areGroupsSelectable"],
+    "defaults": ["id", "label", ":vueSelectProps", "v-model"],
+    "description": "Single or multi-select input using vue-select library. See vue-select docs for props to pass to vueSelectProps object"
+  }
+},

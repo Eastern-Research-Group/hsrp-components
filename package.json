@@ -1,6 +1,6 @@
 {
   "name": "hsrp-components",
-  "version": "0.1.56",
+  "version": "0.1.60",
   "scripts": {
     "build": "vue-cli-service build --report --target lib --name hsrp-components ./src/index.js",
     "lint": "vue-cli-service lint",
@@ -10,14 +10,20 @@
   "main": "dist/hsrp-components.umd.min.js",
   "files": [
     "src",
-    "dist/*.{js,css}"
+    "dist/*.{js,css}",
+    "vue-attributes.json",
+    "vue-tags.json"
   ],
+  "vetur": {
+    "tags": "vue-tags.json",
+    "attributes": "vue-attributes.json"
+  },
   "dependencies": {
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.21.0",
     "lodash": "^4.17.19",
     "uswds": "^2.10.0",
-    "vue": "^2.6.11",
+    "vue": "^2.6.12",
     "vue-select": "^3.4.0"
   },
   "devDependencies": {
@@ -36,7 +42,7 @@
     "node-sass": "^4.14.1",
     "require-context": "^1.1.0",
     "sass-loader": "^8.0.0",
-    "vue-template-compiler": "^2.6.11",
+    "vue-template-compiler": "^2.6.12",
     "vuepress": "^1.2.0"
   }
 }

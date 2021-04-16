@@ -1,0 +1,5 @@
+{
+  "id": {"description": "id attribute of the input - required for accessibility"},
+  "btnStyle": {"options": ["default", "unstyled", "secondary", "accent", "base", "success", "outline", "big"], "description": "style/color of the button"},
+  "label": {"description": "label of input"}
+}
