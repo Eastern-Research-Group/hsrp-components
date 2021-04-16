@@ -22,7 +22,3 @@
 | placeholder    |         String          | Input placeholder                                                        |         |
 | min            |         Number          | If type is "number", set the minimum allowed value                       |         |
 | vueSelectProps |         Object          | If type is "vue-select", pass specific vue-select props in an object     |         |
-
-### Vue-Select
-
-See documentation for vue-select props here: [https://vue-select.org/](https://vue-select.org/)

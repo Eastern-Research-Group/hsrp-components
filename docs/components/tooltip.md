@@ -19,7 +19,3 @@
 | tooltipOnly    |         Boolean         | If you only want the hover text and already have an element that will trigger the tooltip |         |
 | iconOnly       |         Boolean         | If you only want to display an icon that displays the tooltip upon hover/focus     |         |
 | triggers       |         String          | triggers to display tooltip. Recommended to use default of both hover and focus for accessibility | hover focus |
-
-### Vue-Select
-
-See documentation for vue-select props here: [https://vue-select.org/](https://vue-select.org/)
