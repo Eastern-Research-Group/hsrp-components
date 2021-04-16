@@ -67,21 +67,6 @@ export default {
     placeholder: {
       type: String,
     },
-    min: {
-      type: Number,
-      default: 0,
-    },
-    max: {
-      type: Number,
-    },
-    step: {
-      type: String,
-      default: 'any',
-    },
-    isTextArea: {
-      type: Boolean,
-      default: false,
-    },
     tooltip: {
       type: String,
     },
