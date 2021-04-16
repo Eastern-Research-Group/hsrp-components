@@ -67,6 +67,36 @@
         <slot :name="slot" v-bind="scope" />
       </template>
 
+      <!-- Display drilldown for hidden columns on mobile -->
+      <template
+        v-if="tableColumns.find((f) => f.hideOnBreakpoint) && windowWidth < largestBreakpoint"
+        v-slot:cell(Column1)="row"
+      >
+        <Button
+          class="expand-row-button"
+          btnStyle="unstyled"
+          :icon="row.detailsShowing ? 'minus-circle' : 'plus-circle'"
+          :title="row.detailsShowing ? 'Collapse' : 'Expand additional columns'"
+          @click="row.toggleDetails"
+        />
+        <span class="padding-left-4 display-inline-block">{{ row.value }}</span>
+      </template>
+      <template v-slot:row-details="row">
+        <table class="expanded-fields">
+          <thead class="display-none">
+            <th v-for="field in hiddenColumns" :key="`th-${field.key}`" scope="col">
+              {{ field.label }}
+            </th>
+          </thead>
+          <tbody>
+            <tr v-for="field in hiddenColumns" :key="field.key">
+              <th class="text-right">{{ field.label }}</th>
+              <td class="text-left">{{ row.item[field.key] }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </template>
+
       <!-- Display loader when table is empty and in busy state -->
       <template slot="empty">
         <div class="margin-top-1 text-center" style="max-width:60rem">
@@ -153,6 +183,9 @@ export default {
     tableFilter: {
       type: String,
     },
+    breakpoint: {
+      type: String,
+    },
   },
   components: { BTable, BPagination, Loader, TextInput, VirtualScroller },
   data() {
@@ -166,6 +199,13 @@ export default {
       totalRows: 0,
       filteredRows: [],
       isBusy: this.busy,
+      windowWidth: window.innerWidth,
+      breakpoints: {
+        tablet: 640,
+        'tablet-lg': 800,
+        desktop: 1040,
+        'desktop-lg': 1200,
+      },
     };
   },
   computed: {
@@ -185,6 +225,17 @@ export default {
     },
     isServerSide() {
       return typeof this.rowProvider === 'function';
+    },
+    largestBreakpoint() {
+      const breakpoints = this.tableColumns
+        .filter((c) => c.hideOnBreakpoint)
+        .map((c) => this.breakpoints[c.hideOnBreakpoint]);
+      return Math.max(...breakpoints);
+    },
+    hiddenColumns() {
+      return this.tableColumns.filter(
+        (c) => c.hideOnBreakpoint && this.windowWidth < this.breakpoints[c.hideOnBreakpoint]
+      );
     },
   },
   watch: {
@@ -227,7 +278,8 @@ export default {
           ...col,
           key: col.key,
           label: col.label || col.key,
-          tdClass: col.tdClass || 'text-center',
+          tdClass: `${col.tdClass || 'text-center'} ${col.hideOnBreakpoint ? `hide-${col.hideOnBreakpoint}` : ''}`,
+          thClass: `${col.thClass || ''} ${col.hideOnBreakpoint ? `hide-${col.hideOnBreakpoint}` : ''}`,
           sortable: col.sortable !== undefined ? col.sortable : true,
           thAttr: { id: `tooltip-${col.key}` },
         };
@@ -285,6 +337,9 @@ export default {
         this.$refs.tableRef.$el.style.tableLayout = 'fixed';
       }, 50);
     },
+    onResize() {
+      this.windowWidth = window.innerWidth;
+    },
   },
   mounted() {
     this.filteredRows = cloneDeep(this.rows);
@@ -294,6 +349,10 @@ export default {
     if (this.shouldVirtualScroll) {
       this.calculateColumnWidths();
     }
+
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize);
+    });
   },
 };
 </script>
@@ -413,6 +472,75 @@ export default {
 
       .page-link {
         max-width: inherit;
+      }
+    }
+
+    // Responsive styles for hiding columns and expanding below the row
+    .expand-row-button {
+      position: absolute;
+
+      .btn-icon {
+        margin-right: 0;
+      }
+
+      &:focus {
+        outline-offset: -2px;
+      }
+    }
+
+    // Breakpoints for hiding columns (follows USWDS breakpoints)
+    @media screen and (max-width: 1200px) {
+      th.hide-desktop-lg,
+      td.hide-desktop-lg {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 1040px) {
+      th.hide-desktop,
+      td.hide-desktop {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 800px) {
+      th.hide-tablet-lg,
+      td.hide-tablet-lg {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 640px) {
+      th.hide-tablet,
+      td.hide-tablet {
+        display: none;
+      }
+    }
+
+    // Display hidden columns after clicking to expand
+    .expanded-fields {
+      margin: 0;
+      display: table;
+
+      tr {
+        display: table-row;
+      }
+
+      td,
+      th {
+        display: table-cell;
+      }
+
+      td,
+      th,
+      tr {
+        border: none;
+        background-color: transparent !important;
+        padding: 0.25rem 0.75rem;
+      }
+
+      tr {
+        padding: 0 0.5rem;
       }
     }
   }
