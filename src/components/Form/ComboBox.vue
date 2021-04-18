@@ -18,7 +18,6 @@
 </template>
 
 <script>
-import comboBox from 'uswds/src/js/components/combo-box';
 import Tooltip from '../Tooltip.vue';
 
 export default {
@@ -74,8 +73,10 @@ export default {
     },
   },
   mounted() {
-    // Initialize component with USWDS javascript
-    comboBox.on();
+    import('uswds/src/js/components/combo-box').then((comboBox) => {
+      // Initialize component with USWDS javascript
+      comboBox.on();
+    });
   },
 };
 </script>

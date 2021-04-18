@@ -34,7 +34,9 @@ export default {
       validator(value) {
         // prop value must match one of the following
         return (
-          ['default', 'unstyled', 'secondary', 'accent', 'base', 'success', 'outline', 'big'].indexOf(value) !== -1
+          ['', 'default', 'unstyled', 'secondary', 'accent-cool', 'base', 'success', 'outline', 'big'].indexOf(
+            value
+          ) !== -1
         );
       },
     },

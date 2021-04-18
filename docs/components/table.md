@@ -4,7 +4,9 @@ Displays a data table. Note: This component is a wrapper of the [Bootstrap-Vue T
 
 ## Example
 
-<TableDemo />
+<ClientOnly>
+  <TableDemo />
+</ClientOnly>
 
 Code:
 
