@@ -5,6 +5,13 @@
       {{ label }}
       <slot name="label"></slot>
       <Tooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
+      <TooltipQ
+        v-if="tooltipq"
+        :id="`textTooltip${id}`"
+        :iconOnly="true"
+        :description="tooltipq"
+        @clickedQ="showDetailTooltip"
+      />
     </label>
     <span v-if="errorMessage" class="usa-error-message">{{ errorMessage }}</span>
 
@@ -22,10 +29,11 @@
 
 <script>
 import Tooltip from '../Tooltip.vue';
+import TooltipQ from '../TooltipQ.vue'; // question mark tooltip
 
 export default {
   name: 'TextInputUs',
-  components: { Tooltip },
+  components: { Tooltip, TooltipQ },
   props: {
     id: {
       type: String,
@@ -74,6 +82,9 @@ export default {
     tooltip: {
       type: String,
     },
+    tooltipq: {
+      type: String,
+    },
     errorMessage: {
       type: String,
     },
@@ -81,6 +92,9 @@ export default {
   methods: {
     updateValue(event) {
       this.$emit('input', event.target.value);
+    },
+    showDetailTooltip() {
+      this.$emit('displaydetailtooltip');
     },
   },
   mounted() {
