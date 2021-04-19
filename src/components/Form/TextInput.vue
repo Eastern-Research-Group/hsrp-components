@@ -3,7 +3,6 @@
     <label :for="id" :class="`usa-label ${!label && srOnlyLabel ? 'sr-only' : ''}`">
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
-      <slot name="label"></slot>
       <Tooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
       <TooltipQ
         v-if="tooltipq"
@@ -12,6 +11,7 @@
         :description="tooltipq"
         @clickedQ="showDetailTooltip"
       />
+      <slot name="label"></slot>
     </label>
     <span v-if="errorMessage" class="usa-error-message">{{ errorMessage }}</span>
 
