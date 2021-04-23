@@ -91,7 +91,17 @@
           <tbody>
             <tr v-for="field in hiddenColumns" :key="field.key">
               <th class="text-right">{{ field.label }}</th>
-              <td class="text-left">{{ row.item[field.key] }}</td>
+              <td class="text-left">
+                <!-- If slot is available for field, display slot content, otherwise display the value -->
+                <slot
+                  v-if="$scopedSlots[`cell(${field.key})`]"
+                  :name="`cell(${field.key})`"
+                  v-bind="{ value: row.item[field.key] }"
+                />
+                <span v-else>
+                  {{ row.item[field.key] }}
+                </span>
+              </td>
             </tr>
           </tbody>
         </table>
