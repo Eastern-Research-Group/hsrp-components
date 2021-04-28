@@ -1,6 +1,6 @@
 {
   "name": "hsrp-components",
-  "version": "0.1.64",
+  "version": "0.1.65",
   "scripts": {
     "build": "vue-cli-service build --report --target lib --name hsrp-components ./src/index.js",
     "lint": "vue-cli-service lint",
@@ -14,10 +14,6 @@
     "vue-attributes.json",
     "vue-tags.json"
   ],
-  "vetur": {
-    "tags": "vue-tags.json",
-    "attributes": "vue-attributes.json"
-  },
   "dependencies": {
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.21.0",
@@ -31,7 +27,7 @@
     "@vue/babel-preset-app": "^4.1.1",
     "@vue/cli-plugin-babel": "^4.1.1",
     "@vue/cli-plugin-eslint": "^4.1.1",
-    "@vue/cli-service": "^4.3.1",
+    "@vue/cli-service": "^4.5.12",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "babel-eslint": "^10.0.3",
     "eslint": "^6.8.0",
@@ -43,6 +39,10 @@
     "require-context": "^1.1.0",
     "sass-loader": "^8.0.0",
     "vue-template-compiler": "^2.6.12",
-    "vuepress": "^1.2.0"
+    "vuepress": "^1.8.2"
+  },
+  "vetur": {
+    "tags": "vue-tags.json",
+    "attributes": "vue-attributes.json"
   }
 }

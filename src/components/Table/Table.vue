@@ -68,25 +68,35 @@
       </template>
 
       <!-- Display drilldown for hidden columns on mobile -->
-      <template
-        v-if="tableColumns.find((f) => f.hideOnBreakpoint) && windowWidth < largestBreakpoint"
-        v-slot:cell(Column1)="row"
-      >
+      <template :slot="`cell(${firstColKey})`" slot-scope="row">
         <Button
+          v-if="hiddenColumns.length"
           class="expand-row-button"
           btnStyle="unstyled"
           :icon="row.detailsShowing ? 'minus-circle' : 'plus-circle'"
           :title="row.detailsShowing ? 'Collapse' : 'Expand additional columns'"
           @click="row.toggleDetails"
         />
-        <span class="padding-left-4 display-inline-block">{{ row.value }}</span>
+        <!-- Make sure to display slot for first column if expand button is displayed -->
+        <span :class="hiddenColumns.length ? 'padding-left-4 display-inline-block' : ''">
+          <slot
+            v-if="$scopedSlots[`cell(${firstColKey})`]"
+            :name="`cell(${firstColKey})`"
+            v-bind="{ value: row.value }"
+          />
+          <span v-else>
+            {{ row.value }}
+          </span>
+        </span>
       </template>
       <template v-slot:row-details="row">
         <table class="expanded-fields">
           <thead class="display-none">
-            <th v-for="field in hiddenColumns" :key="`th-${field.key}`" scope="col">
-              {{ field.label }}
-            </th>
+            <tr>
+              <th v-for="field in hiddenColumns" :key="`th-${field.key}`" scope="col">
+                {{ field.label }}
+              </th>
+            </tr>
           </thead>
           <tbody>
             <tr v-for="field in hiddenColumns" :key="field.key">
@@ -246,6 +256,9 @@ export default {
       return this.tableColumns.filter(
         (c) => c.hideOnBreakpoint && this.windowWidth < this.breakpoints[c.hideOnBreakpoint]
       );
+    },
+    firstColKey() {
+      return this.tableColumns.length ? this.tableColumns[0].key : null;
     },
   },
   watch: {

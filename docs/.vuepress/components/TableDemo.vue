@@ -1,6 +1,6 @@
 <template>
   <div class="margin-top-2">
-    <Table :columns="columns" :rows="rows" :shouldDisplayFilter="true" breakpoint="680px" >
+    <Table :columns="columns" :rows="rows" :shouldDisplayFilter="true">
       <!-- Custom cell render slot -->
       <template v-slot:cell(Column5)="data">
         <a href="#">{{ data.value }}</a>
