@@ -254,7 +254,7 @@ export default {
     },
     hiddenColumns() {
       return this.tableColumns.filter(
-        (c) => c.hideOnBreakpoint && this.windowWidth < this.breakpoints[c.hideOnBreakpoint]
+        (c) => (c.hideOnBreakpoint && this.windowWidth < this.breakpoints[c.hideOnBreakpoint]) || c.hideByDefault
       );
     },
     firstColKey() {
@@ -301,8 +301,8 @@ export default {
           ...col,
           key: col.key,
           label: col.label || col.key,
-          tdClass: `${col.tdClass || 'text-center'} ${col.hideOnBreakpoint ? `hide-${col.hideOnBreakpoint}` : ''}`,
-          thClass: `${col.thClass || ''} ${col.hideOnBreakpoint ? `hide-${col.hideOnBreakpoint}` : ''}`,
+          tdClass: `${col.tdClass || 'text-center'} ${this.getHiddenColClass(col)}`,
+          thClass: `${col.thClass || ''} ${this.getHiddenColClass(col)}`,
           sortable: col.sortable !== undefined ? col.sortable : true,
           thAttr: { id: `tooltip-${col.key}` },
         };
@@ -362,6 +362,15 @@ export default {
     },
     onResize() {
       this.windowWidth = window.innerWidth;
+    },
+    getHiddenColClass(col) {
+      if (col.hideOnBreakpoint) {
+        return `hide-${col.hideOnBreakpoint}`;
+      }
+      if (col.hideByDefault) {
+        return 'display-none';
+      }
+      return '';
     },
   },
   mounted() {
