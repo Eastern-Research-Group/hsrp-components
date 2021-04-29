@@ -225,6 +225,7 @@ export default {
         'tablet-lg': 800,
         desktop: 1040,
         'desktop-lg': 1200,
+        allsize: 3000,
       },
     };
   },
@@ -540,6 +541,12 @@ export default {
       }
     }
 
+    @media screen and (min-width: 160px) {
+      th.hide-allsize,
+      td.hide-allsize {
+        display: none;
+      }
+    }
     // Display hidden columns after clicking to expand
     .expanded-fields {
       margin: 0;
