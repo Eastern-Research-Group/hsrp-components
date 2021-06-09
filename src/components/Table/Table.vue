@@ -79,11 +79,7 @@
         />
         <!-- Make sure to display slot for first column if expand button is displayed -->
         <span :class="hiddenColumns.length ? 'padding-left-4 display-inline-block' : ''">
-          <slot
-            v-if="$scopedSlots[`cell(${firstColKey})`]"
-            :name="`cell(${firstColKey})`"
-            v-bind="{ value: row.value }"
-          />
+          <slot v-if="$scopedSlots[`cell(${firstColKey})`]" :name="`cell(${firstColKey})`" v-bind="row" />
           <span v-else>
             {{ row.value }}
           </span>
