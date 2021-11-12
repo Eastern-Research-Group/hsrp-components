@@ -99,11 +99,7 @@
               <th class="text-right">{{ field.label }}</th>
               <td class="text-left">
                 <!-- If slot is available for field, display slot content, otherwise display the value -->
-                <slot
-                  v-if="$scopedSlots[`cell(${field.key})`]"
-                  :name="`cell(${field.key})`"
-                  v-bind="{ value: row.item[field.key] }"
-                />
+                <slot v-if="$scopedSlots[`cell(${field.key})`]" :name="`cell(${field.key})`" v-bind="row" />
                 <span v-else>
                   {{ row.item[field.key] }}
                 </span>

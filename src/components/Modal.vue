@@ -36,6 +36,11 @@ export default {
   methods: {
     // Implement "focus trap" - force focus to remain inside modal to ensure accessibility
     handleFocus(e) {
+      // Close modal on Escape keypress
+      if (e.key === 'Escape' && typeof this.closeFnc === 'function') {
+        this.closeFnc();
+      }
+
       if (
         (e.target === this.focusableEls[this.focusableEls.length - 1] && e.key === 'Tab' && !e.shiftKey) ||
         (e.key === 'Tab' && this.focusableEls.indexOf(e.target) === -1)
