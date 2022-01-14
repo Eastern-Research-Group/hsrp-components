@@ -50,13 +50,14 @@
     <BTable
       v-else
       v-bind="tableProps"
-      :items="isServerSide ? rowProvider : rows"
+      :items="isServerSide ? rowProvider : items"
       :busy.sync="isBusy"
       :current-page.sync="currentPage"
       :sort-by.sync="sortBy"
       :sort-desc.sync="sortDesc"
       :api-url.sync="apiUrl"
       :filter.sync="filter"
+      :filter-debounce="500"
       @sort-changed="changeSort"
     >
       <!-- Pass on all named slots -->
@@ -65,6 +66,32 @@
       <!-- Pass on all scoped slots -->
       <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
         <slot :name="slot" v-bind="scope" />
+      </template>
+
+      <!-- Custom Filters row -->
+      <template v-if="filterableFields.length" #top-row="{fields}">
+        <td v-for="field in fields" :key="field.key">
+          <TextInput
+            v-if="filterableFields.map((f) => f.key).includes(field.key) && field.filterType === 'text'"
+            :id="`filter_${field.key}`"
+            class="field-filter"
+            :srOnlyLabel="`Filter ${field.key}`"
+            v-model="fieldFilters[field.key]"
+            @change="$emit('onFieldFilter')"
+          />
+          <VueSelectInput
+            v-else-if="filterableFields.map((f) => f.key).includes(field.key) && field.filterType === 'list'"
+            :id="`filter_${field.key}`"
+            class="field-filter"
+            :srOnlyLabel="`Filter ${field.key}`"
+            :vueSelectProps="{
+              options: field.filterOptions,
+              appendToBody: true,
+            }"
+            v-model="fieldFilters[field.key]"
+            @change="$emit('onFieldFilter')"
+          />
+        </td>
       </template>
 
       <!-- Display drilldown for hidden columns on mobile -->
@@ -144,6 +171,7 @@ import { BTable, BPagination } from 'bootstrap-vue';
 import VirtualScroller from './VirtualScroller.vue';
 import Loader from '../Loader.vue';
 import TextInput from '../Form/TextInput.vue';
+import VueSelectInput from '../Form/VueSelectInput.vue';
 
 export default {
   props: {
@@ -199,7 +227,7 @@ export default {
       type: String,
     },
   },
-  components: { BTable, BPagination, Loader, TextInput, VirtualScroller },
+  components: { BTable, BPagination, Loader, TextInput, VirtualScroller, VueSelectInput },
   data() {
     return {
       sortBy: this.defaultSort || '',
@@ -207,6 +235,7 @@ export default {
       tableColumns: [],
       pendingFilter: '',
       filter: this.tableFilter || '',
+      fieldFilters: {},
       currentPage: 1,
       totalRows: 0,
       filteredRows: [],
@@ -252,10 +281,40 @@ export default {
     firstColKey() {
       return this.tableColumns.length ? this.tableColumns[0].key : null;
     },
+    filterableFields() {
+      return this.columns.filter((col) => !!col.filterType);
+    },
+    items() {
+      if (this.isServerSide) {
+        return this.rows;
+      }
+      if (this.rows && this.rows.length > 0) {
+        const filtered = this.rows.filter((item) => {
+          return Object.keys(this.filter).every((key) =>
+            String(item[key])
+              .toLowerCase()
+              .includes(this.filter[key] ? this.filter[key].toLowerCase() : '')
+          );
+        });
+        return filtered.length > 0
+          ? filtered
+          : [
+              Object.keys(this.rows[0]).reduce((obj, value) => {
+                // eslint-disable-next-line
+                obj[value] = '';
+                return obj;
+              }, {}),
+            ];
+      }
+      return this.rows;
+    },
   },
   watch: {
     columns() {
       this.buildTableColumns();
+      if (this.filterableFields.length) {
+        this.buildFilterValues();
+      }
       if (this.shouldVirtualScroll) {
         this.calculateColumnWidths();
       }
@@ -277,6 +336,10 @@ export default {
       this.currentPage = 1;
       this.filter = this.tableFilter;
     },
+    // eslint-disable-next-line
+    fieldFilters: debounce(function(value) {
+      this.filter = value;
+    }, 500),
   },
   methods: {
     buildTableColumns() {
@@ -297,6 +360,7 @@ export default {
           thClass: `${col.thClass || ''} ${this.getHiddenColClass(col)}`,
           sortable: col.sortable !== undefined ? col.sortable : true,
           thAttr: { id: `tooltip-${col.key}` },
+          filterOptions: col.filterOptions ? col.filterOptions.sort() : null,
         };
       });
     },
@@ -364,11 +428,38 @@ export default {
       }
       return '';
     },
+    buildFilterValues() {
+      const filters = {};
+      this.filterableFields.forEach((field) => {
+        filters[field.key] = '';
+      });
+    },
+    positionFilterRow() {
+      const head = document.querySelector('.b-table thead tr th');
+      const filterCells = document.querySelectorAll('.b-table-top-row td');
+      for (let i = 0; i < filterCells.length; i += 1) {
+        filterCells[i].style.top = `${head.offsetHeight - 2}px`;
+      }
+    },
+    getFilterOptions(field) {
+      if (this.isServerSide) return [];
+      const rawField = this.filterableFields.find((f) => f.key === field.key);
+      let options = this.rows.map((row) => row[field.key]).filter((v, i, a) => a.indexOf(v) === i && !!v);
+      // If options need to be sorted in specific way, check for "customFilterSort" prop in field object and sort accordingly
+      if (rawField.customFilterSort) {
+        options = rawField.customFilterSort.filter((val) => options.includes(val));
+      }
+      return options;
+    },
   },
   mounted() {
     this.filteredRows = cloneDeep(this.rows);
     this.totalRows = this.isServerSide ? this.total : this.rows.length;
     this.buildTableColumns();
+    if (this.filterableFields.length) {
+      this.buildFilterValues();
+      this.positionFilterRow();
+    }
 
     if (this.shouldVirtualScroll) {
       this.calculateColumnWidths();
@@ -446,6 +537,10 @@ export default {
       &[aria-busy='true'] {
         opacity: 0.6;
       }
+    }
+
+    .filter-table th {
+      border-bottom: none !important;
     }
 
     .b-pagination {
@@ -592,6 +687,24 @@ export default {
       display: inline-block;
       width: 200px;
       margin-top: 0;
+    }
+  }
+
+  .field-filter ::v-deep {
+    max-width: 300px;
+    margin: auto;
+
+    .vs__dropdown-toggle {
+      margin: 0;
+    }
+
+    .vs__dropdown-menu {
+      width: 500px;
+    }
+
+    .usa-input {
+      width: auto;
+      margin: auto;
     }
   }
 
