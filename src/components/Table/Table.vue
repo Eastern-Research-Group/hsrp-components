@@ -123,8 +123,8 @@
           </thead>
           <tbody>
             <tr v-for="field in hiddenColumns" :key="field.key">
-              <th class="text-right">{{ field.label }}</th>
-              <td class="text-left">
+              <th class="text-right text-middle">{{ field.label }}</th>
+              <td :class="`text-left ${field.tdClass}`">
                 <!-- If slot is available for field, display slot content, otherwise display the value -->
                 <slot v-if="$scopedSlots[`cell(${field.key})`]" :name="`cell(${field.key})`" v-bind="row" />
                 <span v-else>
@@ -274,7 +274,7 @@ export default {
       return Math.max(...breakpoints);
     },
     hiddenColumns() {
-      return this.tableColumns.filter(
+      return this.columns.filter(
         (c) => (c.hideOnBreakpoint && this.windowWidth < this.breakpoints[c.hideOnBreakpoint]) || c.hideByDefault
       );
     },
@@ -343,7 +343,7 @@ export default {
   },
   methods: {
     buildTableColumns() {
-      this.tableColumns = this.columns.map((col) => {
+      const columns = this.columns.map((col) => {
         if (typeof col === 'string') {
           return {
             key: col,
@@ -360,9 +360,17 @@ export default {
           thClass: `${col.thClass || ''} ${this.getHiddenColClass(col)}`,
           sortable: col.sortable !== undefined ? col.sortable : true,
           thAttr: { id: `tooltip-${col.key}` },
-          filterOptions: col.filterOptions ? col.filterOptions.sort() : null,
         };
       });
+      if (this.hiddenColumns.length) {
+        columns.unshift({
+          key: 'showAdditional',
+          label: 'Show Additional Fields',
+          thClass: 'show-additional',
+          sortable: false,
+        });
+      }
+      this.tableColumns = columns;
     },
     /* eslint-disable func-names */
     setFilter: debounce(function(value) {
@@ -596,7 +604,8 @@ export default {
 
     // Responsive styles for hiding columns and expanding below the row
     .expand-row-button {
-      position: absolute;
+      margin: 0;
+      padding: 0;
 
       .btn-icon {
         margin-right: 0;
@@ -640,6 +649,10 @@ export default {
     .expanded-fields {
       margin: 0;
       display: table;
+
+      th.text-middle {
+        vertical-align: middle !important;
+      }
 
       tr {
         display: table-row;
