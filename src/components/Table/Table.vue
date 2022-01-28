@@ -95,7 +95,7 @@
       </template>
 
       <!-- Display drilldown for hidden columns on mobile -->
-      <template :slot="`cell(${firstColKey})`" slot-scope="row">
+      <template :slot="`cell(showAdditional)`" slot-scope="row">
         <Button
           v-if="hiddenColumns.length"
           class="expand-row-button"
@@ -104,13 +104,6 @@
           :title="row.detailsShowing ? 'Collapse' : 'Expand additional columns'"
           @click="row.toggleDetails"
         />
-        <!-- Make sure to display slot for first column if expand button is displayed -->
-        <span :class="hiddenColumns.length ? 'padding-left-4 display-inline-block' : ''">
-          <slot v-if="$scopedSlots[`cell(${firstColKey})`]" :name="`cell(${firstColKey})`" v-bind="row" />
-          <span v-else>
-            {{ row.value }}
-          </span>
-        </span>
       </template>
       <template v-slot:row-details="row">
         <table class="expanded-fields">
@@ -277,9 +270,6 @@ export default {
       return this.columns.filter(
         (c) => (c.hideOnBreakpoint && this.windowWidth < this.breakpoints[c.hideOnBreakpoint]) || c.hideByDefault
       );
-    },
-    firstColKey() {
-      return this.tableColumns.length ? this.tableColumns[0].key : null;
     },
     filterableFields() {
       return this.columns.filter((col) => !!col.filterType);
@@ -674,6 +664,10 @@ export default {
       tr {
         padding: 0 0.5rem;
       }
+    }
+
+    .show-additional div {
+      display: none;
     }
   }
 
