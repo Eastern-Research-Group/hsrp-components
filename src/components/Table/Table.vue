@@ -85,7 +85,7 @@
             class="field-filter"
             :srOnlyLabel="`Filter ${field.key}`"
             :vueSelectProps="{
-              options: field.filterOptions,
+              options: getFilterOptions(field),
               appendToBody: true,
             }"
             v-model="fieldFilters[field.key]"
@@ -316,6 +316,11 @@ export default {
       }
       this.totalRows = this.isServerSide ? this.total : this.filteredRows.length;
     },
+    filteredRows() {
+      if (this.filterableFields.length) {
+        this.positionFilterRow();
+      }
+    },
     total() {
       this.totalRows = this.total;
     },
@@ -433,14 +438,16 @@ export default {
       });
     },
     positionFilterRow() {
-      const head = document.querySelector('.b-table thead tr th');
-      const filterCells = document.querySelectorAll('.b-table-top-row td');
-      for (let i = 0; i < filterCells.length; i += 1) {
-        filterCells[i].style.top = `${head.offsetHeight - 2}px`;
-      }
+      setTimeout(() => {
+        const head = document.querySelector('.b-table thead tr th');
+        const filterCells = document.querySelectorAll('.b-table-top-row td');
+        for (let i = 0; i < filterCells.length; i += 1) {
+          filterCells[i].style.top = `${head.offsetHeight - 2}px`;
+        }
+      }, 200);
     },
     getFilterOptions(field) {
-      if (this.isServerSide) return [];
+      if (this.isServerSide) return field.filterOptions;
       const rawField = this.filterableFields.find((f) => f.key === field.key);
       let options = this.rows.map((row) => row[field.key]).filter((v, i, a) => a.indexOf(v) === i && !!v);
       // If options need to be sorted in specific way, check for "customFilterSort" prop in field object and sort accordingly
@@ -697,12 +704,25 @@ export default {
     }
   }
 
+  .b-table-top-row td {
+    position: sticky;
+    z-index: 1;
+    background: #f1f1f1;
+    border-bottom: 1px solid #ddd;
+    padding: 0.5rem;
+  }
+
   .field-filter ::v-deep {
     max-width: 300px;
     margin: auto;
 
+    .v-select {
+      background-color: #fff;
+    }
+
     .vs__dropdown-toggle {
       margin: 0;
+      min-height: 2rem;
     }
 
     .vs__dropdown-menu {
@@ -710,6 +730,7 @@ export default {
     }
 
     .usa-input {
+      height: 2rem;
       width: auto;
       margin: auto;
     }
