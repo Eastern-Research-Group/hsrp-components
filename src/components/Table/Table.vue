@@ -438,13 +438,11 @@ export default {
       });
     },
     positionFilterRow() {
-      setTimeout(() => {
-        const head = document.querySelector('.b-table thead tr th');
-        const filterCells = document.querySelectorAll('.b-table-top-row td');
-        for (let i = 0; i < filterCells.length; i += 1) {
-          filterCells[i].style.top = `${head.offsetHeight - 2}px`;
-        }
-      }, 200);
+      const head = document.querySelector('.b-table thead tr th');
+      const filterCells = document.querySelectorAll('.b-table-top-row td');
+      for (let i = 0; i < filterCells.length; i += 1) {
+        filterCells[i].style.top = `${head.offsetHeight - 2}px`;
+      }
     },
     getFilterOptions(field) {
       if (this.isServerSide) return field.filterOptions;
