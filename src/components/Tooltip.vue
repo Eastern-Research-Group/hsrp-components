@@ -4,7 +4,7 @@
       {{ label }}
     </abbr>
     <span v-else-if="iconOnly" class="fa fa-info-circle" :id="id" :title="description" tabindex="0"></span>
-    <BTooltip :target="id" :triggers="triggers" :placement="placement" boundary="window">
+    <BTooltip :target="id" :triggers="triggers" :placement="placement" boundary="window" :delay="delay">
       {{ description }}
     </BTooltip>
   </span>
@@ -42,6 +42,10 @@ export default {
     triggers: {
       type: String,
       default: 'hover focus',
+    },
+    delay: {
+      type: String,
+      default: '300',
     },
   },
   components: { BTooltip },
@@ -199,7 +203,8 @@ export default {
   opacity: 0.9;
 }
 
-.tooltip.b-tooltip.noninteractive {
+.tooltip.b-tooltip.noninteractive,
+.hsrp-tooltip .fa-info-circle {
   pointer-events: none;
 }
 
