@@ -55,15 +55,18 @@ export default {
 }
 
 .usa-checkbox__label {
+  color: inherit;
+  font-size: inherit;
   display: inline-block;
   margin-top: 0.25rem;
+  padding-left: 1.5rem;
 }
 
 .usa-checkbox__label::before {
   box-shadow: 0 0 0 1pt #71767a;
-  margin-right: 0.5rem;
+  margin-left: 0;
   height: 1rem;
   width: 1rem;
-  top: 2px;
+  top: 1px;
 }
 </style>

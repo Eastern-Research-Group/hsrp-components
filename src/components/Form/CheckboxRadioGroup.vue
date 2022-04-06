@@ -139,7 +139,7 @@ export default {
   margin-right: 0.5rem;
   height: 1rem;
   width: 1rem;
-  top: 2px;
+  top: 1px;
 }
 
 .usa-fieldset[readonly] {
