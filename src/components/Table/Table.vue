@@ -69,7 +69,7 @@
       </template>
 
       <!-- Custom Filters row -->
-      <template v-if="filterableFields.length" #top-row="{fields}">
+      <template v-if="shouldFilter && filterableFields.length" #top-row="{fields}">
         <td v-for="field in fields" :key="field.key">
           <TextInput
             v-if="filterableFields.map((f) => f.key).includes(field.key) && field.filterType === 'text'"
@@ -219,6 +219,13 @@ export default {
     breakpoint: {
       type: String,
     },
+    fieldFilters: {
+      type: Object,
+      default: () => ({}),
+    },
+    shouldFilter: {
+      type: Boolean,
+    },
   },
   components: { BTable, BPagination, Loader, TextInput, VirtualScroller, VueSelectInput },
   data() {
@@ -228,7 +235,6 @@ export default {
       tableColumns: [],
       pendingFilter: '',
       filter: this.tableFilter || '',
-      fieldFilters: {},
       currentPage: 1,
       totalRows: 0,
       filteredRows: [],
@@ -438,11 +444,20 @@ export default {
       });
     },
     positionFilterRow() {
-      const head = document.querySelector('.b-table thead tr th');
-      const filterCells = document.querySelectorAll('.b-table-top-row td');
-      for (let i = 0; i < filterCells.length; i += 1) {
-        filterCells[i].style.top = `${head.offsetHeight - 2}px`;
-      }
+      // Set timeout is required for header cell to be found
+      setTimeout(() => {
+        const head = document.querySelector('.b-table thead tr th');
+        const filterCells = document.querySelectorAll('.b-table-top-row td');
+
+        // Observe first header cell for height changes (due to Bootstrap-Vue's rendering), then set top value to make filter row sticky
+        const observer = new ResizeObserver(() => {
+          for (let i = 0; i < filterCells.length; i += 1) {
+            filterCells[i].style.top = `${head.offsetHeight - 2}px`;
+          }
+        });
+
+        if (head) observer.observe(head);
+      }, 0);
     },
     getFilterOptions(field) {
       if (this.isServerSide) return field.filterOptions;
