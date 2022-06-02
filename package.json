@@ -1,6 +1,6 @@
 {
   "name": "hsrp-components",
-  "version": "0.1.74",
+  "version": "0.1.78",
   "engines": {
     "node": "16.x"
   },
