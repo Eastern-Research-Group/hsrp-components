@@ -1,6 +1,9 @@
 <template>
-  <aside class="sidenav-container">
-    <div class="sticky-container">
+  <aside class="sidenav-container" :title="hoverTitle">
+    <Button class="nav-toggle" btnStyle="unstyled" icon="bars" @click="shouldDisplaySidenav = !shouldDisplaySidenav">
+      Toggle Navigation Menu
+    </Button>
+    <div v-show="shouldDisplaySidenav" class="sticky-container">
       <h4 v-if="title" class="usa-heading-alt">{{ title }}</h4>
       <nav aria-label="Secondary navigation">
         <ul class="usa-sidenav">
@@ -51,6 +54,9 @@ export default {
     title: {
       type: String,
     },
+    hoverTitle: {
+      type: String,
+    },
     items: {
       type: Array,
       required: true,
@@ -58,6 +64,11 @@ export default {
         return prop.every((item) => item.title);
       },
     },
+  },
+  data() {
+    return {
+      shouldDisplaySidenav: true,
+    };
   },
   methods: {
     getLinkClass(path) {
@@ -102,6 +113,31 @@ export default {
     .usa-sidenav__sublist a {
       padding-left: 2.25rem;
     }
+  }
+}
+
+// Responsive styles
+.nav-toggle {
+  display: none;
+}
+
+@media screen and (max-width: 768px) {
+  .sidenav-container {
+    width: 100%;
+    max-width: 100%;
+    z-index: 999;
+    background: #fff;
+    margin-right: 0;
+  }
+
+  .sidenav-container .sticky-container {
+    padding-top: 0.5rem;
+    max-height: 220px;
+  }
+
+  .nav-toggle {
+    display: inline-block;
+    margin-bottom: 4px;
   }
 }
 </style>
