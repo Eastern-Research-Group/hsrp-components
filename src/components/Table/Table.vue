@@ -59,6 +59,7 @@
       :filter.sync="filter"
       :filter-debounce="500"
       @sort-changed="changeSort"
+      :stacked="stacked"
     >
       <!-- Pass on all named slots -->
       <slot v-for="slot in Object.keys($slots)" :name="slot" :slot="slot" />
@@ -225,6 +226,9 @@ export default {
     },
     shouldFilter: {
       type: Boolean,
+    },
+    stacked: {
+      type: [Boolean, String],
     },
   },
   components: { BTable, BPagination, Loader, TextInput, VirtualScroller, VueSelectInput },
@@ -688,6 +692,301 @@ export default {
 
     .show-additional div {
       display: none;
+    }
+
+    // Stacked styles
+    @media (max-width: 575.98px) {
+      .table.b-table.b-table-stacked-sm {
+        display: block;
+        width: 100%;
+      }
+      .table.b-table.b-table-stacked-sm > caption,
+      .table.b-table.b-table-stacked-sm > tbody,
+      .table.b-table.b-table-stacked-sm > tbody > tr,
+      .table.b-table.b-table-stacked-sm > tbody > tr > td,
+      .table.b-table.b-table-stacked-sm > tbody > tr > th {
+        display: block;
+      }
+      .table.b-table.b-table-stacked-sm > thead,
+      .table.b-table.b-table-stacked-sm > tfoot {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-sm > thead > tr.b-table-top-row,
+      .table.b-table.b-table-stacked-sm > thead > tr.b-table-bottom-row,
+      .table.b-table.b-table-stacked-sm > tfoot > tr.b-table-top-row,
+      .table.b-table.b-table-stacked-sm > tfoot > tr.b-table-bottom-row {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-sm > caption {
+        caption-side: top !important;
+      }
+      .table.b-table.b-table-stacked-sm > tbody > tr > [data-label]::before {
+        content: attr(data-label);
+        width: 40%;
+        float: left;
+        text-align: right;
+        overflow-wrap: break-word;
+        font-weight: bold;
+        font-style: normal;
+        padding: 0 calc(1rem / 2) 0 0;
+        margin: 0;
+      }
+      .table.b-table.b-table-stacked-sm > tbody > tr > [data-label]::after {
+        display: block;
+        clear: both;
+        content: '';
+      }
+      .table.b-table.b-table-stacked-sm > tbody > tr > [data-label] > div {
+        display: inline-block;
+        width: calc(100% - 40%);
+        padding: 0 0 0 calc(1rem / 2);
+        margin: 0;
+      }
+      .table.b-table.b-table-stacked-sm > tbody > tr.top-row,
+      .table.b-table.b-table-stacked-sm > tbody > tr.bottom-row {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-sm > tbody > tr > :first-child {
+        border-top-width: 3px;
+      }
+      .table.b-table.b-table-stacked-sm > tbody > tr > [rowspan] + td,
+      .table.b-table.b-table-stacked-sm > tbody > tr > [rowspan] + th {
+        border-top-width: 3px;
+      }
+    }
+    @media (max-width: 767.98px) {
+      .table.b-table.b-table-stacked-md {
+        display: block;
+        width: 100%;
+      }
+      .table.b-table.b-table-stacked-md > caption,
+      .table.b-table.b-table-stacked-md > tbody,
+      .table.b-table.b-table-stacked-md > tbody > tr,
+      .table.b-table.b-table-stacked-md > tbody > tr > td,
+      .table.b-table.b-table-stacked-md > tbody > tr > th {
+        display: block;
+      }
+      .table.b-table.b-table-stacked-md > thead,
+      .table.b-table.b-table-stacked-md > tfoot {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-md > thead > tr.b-table-top-row,
+      .table.b-table.b-table-stacked-md > thead > tr.b-table-bottom-row,
+      .table.b-table.b-table-stacked-md > tfoot > tr.b-table-top-row,
+      .table.b-table.b-table-stacked-md > tfoot > tr.b-table-bottom-row {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-md > caption {
+        caption-side: top !important;
+      }
+      .table.b-table.b-table-stacked-md > tbody > tr > [data-label]::before {
+        content: attr(data-label);
+        width: 40%;
+        float: left;
+        text-align: right;
+        overflow-wrap: break-word;
+        font-weight: bold;
+        font-style: normal;
+        padding: 0 calc(1rem / 2) 0 0;
+        margin: 0;
+      }
+      .table.b-table.b-table-stacked-md > tbody > tr > [data-label]::after {
+        display: block;
+        clear: both;
+        content: '';
+      }
+      .table.b-table.b-table-stacked-md > tbody > tr > [data-label] > div {
+        display: inline-block;
+        width: calc(100% - 40%);
+        padding: 0 0 0 calc(1rem / 2);
+        margin: 0;
+      }
+      .table.b-table.b-table-stacked-md > tbody > tr.top-row,
+      .table.b-table.b-table-stacked-md > tbody > tr.bottom-row {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-md > tbody > tr > :first-child {
+        border-top-width: 3px;
+      }
+      .table.b-table.b-table-stacked-md > tbody > tr > [rowspan] + td,
+      .table.b-table.b-table-stacked-md > tbody > tr > [rowspan] + th {
+        border-top-width: 3px;
+      }
+    }
+    @media (max-width: 991.98px) {
+      .table.b-table.b-table-stacked-lg {
+        display: block;
+        width: 100%;
+      }
+      .table.b-table.b-table-stacked-lg > caption,
+      .table.b-table.b-table-stacked-lg > tbody,
+      .table.b-table.b-table-stacked-lg > tbody > tr,
+      .table.b-table.b-table-stacked-lg > tbody > tr > td,
+      .table.b-table.b-table-stacked-lg > tbody > tr > th {
+        display: block;
+      }
+      .table.b-table.b-table-stacked-lg > thead,
+      .table.b-table.b-table-stacked-lg > tfoot {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-lg > thead > tr.b-table-top-row,
+      .table.b-table.b-table-stacked-lg > thead > tr.b-table-bottom-row,
+      .table.b-table.b-table-stacked-lg > tfoot > tr.b-table-top-row,
+      .table.b-table.b-table-stacked-lg > tfoot > tr.b-table-bottom-row {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-lg > caption {
+        caption-side: top !important;
+      }
+      .table.b-table.b-table-stacked-lg > tbody > tr > [data-label]::before {
+        content: attr(data-label);
+        width: 40%;
+        float: left;
+        text-align: right;
+        overflow-wrap: break-word;
+        font-weight: bold;
+        font-style: normal;
+        padding: 0 calc(1rem / 2) 0 0;
+        margin: 0;
+      }
+      .table.b-table.b-table-stacked-lg > tbody > tr > [data-label]::after {
+        display: block;
+        clear: both;
+        content: '';
+      }
+      .table.b-table.b-table-stacked-lg > tbody > tr > [data-label] > div {
+        display: inline-block;
+        width: calc(100% - 40%);
+        padding: 0 0 0 calc(1rem / 2);
+        margin: 0;
+      }
+      .table.b-table.b-table-stacked-lg > tbody > tr.top-row,
+      .table.b-table.b-table-stacked-lg > tbody > tr.bottom-row {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-lg > tbody > tr > :first-child {
+        border-top-width: 3px;
+      }
+      .table.b-table.b-table-stacked-lg > tbody > tr > [rowspan] + td,
+      .table.b-table.b-table-stacked-lg > tbody > tr > [rowspan] + th {
+        border-top-width: 3px;
+      }
+    }
+    @media (max-width: 1199.98px) {
+      .table.b-table.b-table-stacked-xl {
+        display: block;
+        width: 100%;
+      }
+      .table.b-table.b-table-stacked-xl > caption,
+      .table.b-table.b-table-stacked-xl > tbody,
+      .table.b-table.b-table-stacked-xl > tbody > tr,
+      .table.b-table.b-table-stacked-xl > tbody > tr > td,
+      .table.b-table.b-table-stacked-xl > tbody > tr > th {
+        display: block;
+      }
+      .table.b-table.b-table-stacked-xl > thead,
+      .table.b-table.b-table-stacked-xl > tfoot {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-xl > thead > tr.b-table-top-row,
+      .table.b-table.b-table-stacked-xl > thead > tr.b-table-bottom-row,
+      .table.b-table.b-table-stacked-xl > tfoot > tr.b-table-top-row,
+      .table.b-table.b-table-stacked-xl > tfoot > tr.b-table-bottom-row {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-xl > caption {
+        caption-side: top !important;
+      }
+      .table.b-table.b-table-stacked-xl > tbody > tr > [data-label]::before {
+        content: attr(data-label);
+        width: 40%;
+        float: left;
+        text-align: right;
+        overflow-wrap: break-word;
+        font-weight: bold;
+        font-style: normal;
+        padding: 0 calc(1rem / 2) 0 0;
+        margin: 0;
+      }
+      .table.b-table.b-table-stacked-xl > tbody > tr > [data-label]::after {
+        display: block;
+        clear: both;
+        content: '';
+      }
+      .table.b-table.b-table-stacked-xl > tbody > tr > [data-label] > div {
+        display: inline-block;
+        width: calc(100% - 40%);
+        padding: 0 0 0 calc(1rem / 2);
+        margin: 0;
+      }
+      .table.b-table.b-table-stacked-xl > tbody > tr.top-row,
+      .table.b-table.b-table-stacked-xl > tbody > tr.bottom-row {
+        display: none;
+      }
+      .table.b-table.b-table-stacked-xl > tbody > tr > :first-child {
+        border-top-width: 3px;
+      }
+      .table.b-table.b-table-stacked-xl > tbody > tr > [rowspan] + td,
+      .table.b-table.b-table-stacked-xl > tbody > tr > [rowspan] + th {
+        border-top-width: 3px;
+      }
+    }
+    .table.b-table.b-table-stacked {
+      display: block;
+      width: 100%;
+    }
+    .table.b-table.b-table-stacked > caption,
+    .table.b-table.b-table-stacked > tbody,
+    .table.b-table.b-table-stacked > tbody > tr,
+    .table.b-table.b-table-stacked > tbody > tr > td,
+    .table.b-table.b-table-stacked > tbody > tr > th {
+      display: block;
+    }
+    .table.b-table.b-table-stacked > thead,
+    .table.b-table.b-table-stacked > tfoot {
+      display: none;
+    }
+    .table.b-table.b-table-stacked > thead > tr.b-table-top-row,
+    .table.b-table.b-table-stacked > thead > tr.b-table-bottom-row,
+    .table.b-table.b-table-stacked > tfoot > tr.b-table-top-row,
+    .table.b-table.b-table-stacked > tfoot > tr.b-table-bottom-row {
+      display: none;
+    }
+    .table.b-table.b-table-stacked > caption {
+      caption-side: top !important;
+    }
+    .table.b-table.b-table-stacked > tbody > tr > [data-label]::before {
+      content: attr(data-label);
+      width: 40%;
+      float: left;
+      text-align: right;
+      overflow-wrap: break-word;
+      font-weight: bold;
+      font-style: normal;
+      padding: 0 calc(1rem / 2) 0 0;
+      margin: 0;
+    }
+    .table.b-table.b-table-stacked > tbody > tr > [data-label]::after {
+      display: block;
+      clear: both;
+      content: '';
+    }
+    .table.b-table.b-table-stacked > tbody > tr > [data-label] > div {
+      display: inline-block;
+      width: calc(100% - 40%);
+      padding: 0 0 0 calc(1rem / 2);
+      margin: 0;
+    }
+    .table.b-table.b-table-stacked > tbody > tr.top-row,
+    .table.b-table.b-table-stacked > tbody > tr.bottom-row {
+      display: none;
+    }
+    .table.b-table.b-table-stacked > tbody > tr > :first-child {
+      border-top-width: 3px;
+    }
+    .table.b-table.b-table-stacked > tbody > tr > [rowspan] + td,
+    .table.b-table.b-table-stacked > tbody > tr > [rowspan] + th {
+      border-top-width: 3px;
     }
   }
 
