@@ -1,9 +1,9 @@
 <template>
   <div
     v-show="!dismissed"
-    :class="
-      `usa-alert usa-alert--${type} ${validation ? 'usa-alert--validation' : ''} ${slim ? 'usa-alert--slim' : ''}`
-    "
+    :class="`usa-alert usa-alert--${type} ${validation ? 'usa-alert--validation' : ''} ${
+      slim ? 'usa-alert--slim' : ''
+    }`"
     role="alert"
     tabindex="0"
   >

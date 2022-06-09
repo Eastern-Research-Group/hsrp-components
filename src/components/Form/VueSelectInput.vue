@@ -13,7 +13,7 @@
       :selectable="(option) => (areGroupsSelectable ? true : !option.group)"
       @input="$emit('input', $event)"
     >
-      <template #search="{attributes, events}">
+      <template #search="{ attributes, events }">
         <input
           class="vs__search"
           :required="required && (!value || (value && value.length === 0))"

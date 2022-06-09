@@ -70,7 +70,7 @@
       </template>
 
       <!-- Custom Filters row -->
-      <template v-if="shouldFilter && filterableFields.length" #top-row="{fields}">
+      <template v-if="shouldFilter && filterableFields.length" #top-row="{ fields }">
         <td v-for="field in fields" :key="field.key">
           <TextInput
             v-if="filterableFields.map((f) => f.key).includes(field.key) && field.filterType === 'text'"
@@ -132,13 +132,13 @@
 
       <!-- Display loader when table is empty and in busy state -->
       <template slot="empty">
-        <div class="margin-top-1 text-center" style="max-width:60rem">
-          <Loader v-if="isBusy" style="height:410px" />
+        <div class="margin-top-1 text-center" style="max-width: 60rem">
+          <Loader v-if="isBusy" style="height: 410px" />
           <p v-else>{{ emptyText }}</p>
         </div>
       </template>
       <template slot="emptyfiltered">
-        <div class="margin-top-1 text-center" style="max-width:60rem;height:410px">
+        <div class="margin-top-1 text-center" style="max-width: 60rem; height: 410px">
           <Loader v-if="isBusy" />
           <p v-else>{{ emptyText }}</p>
         </div>
@@ -378,10 +378,10 @@ export default {
       this.tableColumns = columns;
     },
     /* eslint-disable func-names */
-    setFilter: debounce(function(value) {
+    setFilter: debounce(function (value) {
       this.filter = value;
     }, 500),
-    filterTable: debounce(function(e) {
+    filterTable: debounce(function (e) {
       // need to re-clone the object for when the user deletes filter term
       let filterData = cloneDeep(this.rows);
       // only filter if value is not blank

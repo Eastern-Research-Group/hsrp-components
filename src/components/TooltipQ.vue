@@ -10,6 +10,7 @@
       :title="description"
       tabindex="0"
       @click="clickedQ"
+      @keyup.enter="clickedQ"
     ></span>
     <BTooltip :target="id" :triggers="triggers" :placement="placement" boundary="window">
       {{ description }}

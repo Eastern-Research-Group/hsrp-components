@@ -1,5 +1,9 @@
 <template>
-  <div class="modal-container" @click="typeof closeFnc === 'function' ? closeFnc() : () => {}">
+  <div
+    class="modal-container"
+    @keyup.esc="typeof closeFnc === 'function' ? closeFnc() : () => {}"
+    @click="typeof closeFnc === 'function' ? closeFnc() : () => {}"
+  >
     <div class="modal" :style="customStyle" @click.stop role="dialog">
       <div class="modal-header">
         <span>{{ header }}</span>
