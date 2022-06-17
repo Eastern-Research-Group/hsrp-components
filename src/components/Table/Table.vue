@@ -348,24 +348,27 @@ export default {
   },
   methods: {
     buildTableColumns() {
-      const columns = this.columns.map((col) => {
+      const columns = [];
+      this.columns.forEach((col) => {
         if (typeof col === 'string') {
-          return {
+          columns.push({
             key: col,
             label: col,
             tdClass: 'text-center',
             sortable: true,
-          };
+          });
         }
-        return {
-          ...col,
-          key: col.key,
-          label: col.label || col.key,
-          tdClass: `${col.tdClass || 'text-center'} ${this.getHiddenColClass(col)}`,
-          thClass: `${col.thClass || ''} ${this.getHiddenColClass(col)}`,
-          sortable: col.sortable !== undefined ? col.sortable : true,
-          thAttr: { id: `tooltip-${col.key}` },
-        };
+        if (!this.hiddenColumns.find((hidden) => hidden.key === col.key)) {
+          columns.push({
+            ...col,
+            key: col.key,
+            label: col.label || col.key,
+            tdClass: `${col.tdClass || 'text-center'} ${this.getHiddenColClass(col)}`,
+            thClass: `${col.thClass || ''} ${this.getHiddenColClass(col)}`,
+            sortable: col.sortable !== undefined ? col.sortable : true,
+            thAttr: col.thAttr, // { id: `tooltip-${col.key}` },
+          });
+        }
       });
       if (this.hiddenColumns.length) {
         columns.unshift({
@@ -691,7 +694,14 @@ export default {
     }
 
     .show-additional div {
-      display: none;
+      border: 0;
+      clip: rect(0, 0, 0, 0);
+      height: 1px;
+      margin: -1px;
+      overflow: hidden;
+      padding: 0;
+      position: absolute;
+      width: 1px;
     }
 
     // Stacked styles
