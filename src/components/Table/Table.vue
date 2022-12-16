@@ -156,11 +156,11 @@
 </template>
 
 <script>
-import cloneDeep from 'lodash/cloneDeep';
-import debounce from 'lodash/debounce';
-import orderBy from 'lodash/orderBy';
-import some from 'lodash/some';
-import toLower from 'lodash/toLower';
+import cloneDeep from 'lodash.clonedeep';
+import debounce from 'lodash.debounce';
+import orderBy from 'lodash.orderby';
+import some from 'lodash.some';
+import toLower from 'lodash.tolower';
 import { BTable, BPagination } from 'bootstrap-vue';
 import VirtualScroller from './VirtualScroller.vue';
 import Loader from '../Loader.vue';
