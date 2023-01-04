@@ -1,8 +1,8 @@
 <template>
   <span class="hsrp-tooltip">
-    <abbr v-if="!tooltipOnly && !iconOnly" class="tooltip-label" :id="id" :title="description" tabindex="0">
-      {{ label }}
-    </abbr>
+    <abbr v-if="!tooltipOnly && !iconOnly" class="tooltip-label" :id="id" :title="description" tabindex="0">{{
+      label
+    }}</abbr>
     <span v-else-if="iconOnly" class="fa fa-info-circle" :id="id" :title="description" tabindex="0"></span>
     <BTooltip :target="id" :triggers="triggers" :placement="placement" boundary="window" :delay="delay">
       {{ description }}
