@@ -6,6 +6,7 @@ import Modal from './Modal.vue';
 import SideNav from './SideNav.vue';
 import Table from './Table/Table.vue';
 import Tooltip from './Tooltip.vue';
+import TooltipNew from './TooltipNew.vue';
 import TooltipQ from './TooltipQ.vue';
 
 // Form components
@@ -25,6 +26,7 @@ export {
   SideNav,
   Table,
   Tooltip,
+  TooltipNew,
   TooltipQ,
   // Form components
   Checkbox,
