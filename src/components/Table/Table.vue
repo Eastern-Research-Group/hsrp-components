@@ -7,48 +7,11 @@
         id="filter"
         label="Search"
         :value="filter"
-        @input="shouldVirtualScroll ? filterTable($event) : setFilter($event)"
+        @input="setFilter($event)"
       />
     </div>
 
-    <VirtualScroller
-      v-if="shouldVirtualScroll"
-      class="v-scroll-container"
-      :items="isServerSide ? rowProvider : filteredRows"
-      :item-height="rowHeight ? rowHeight : columns.length < 8 ? 60 : 100"
-      :style="{ maxHeight: height }"
-    >
-      <template slot-scope="{ items }">
-        <BTable
-          v-bind="tableProps"
-          ref="tableRef"
-          :items="items"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          @sort-changed="sortTable"
-        >
-          <!-- Pass on all named slots -->
-          <slot v-for="slot in Object.keys($slots)" :name="slot" :slot="slot" />
-
-          <!-- Pass on all scoped slots -->
-          <template v-for="slot in Object.keys($scopedSlots)" :slot="slot" slot-scope="scope">
-            <slot :name="slot" v-bind="scope" />
-          </template>
-
-          <!-- Display loader when table is empty and in busy state -->
-          <template slot="empty">
-            <div v-if="isBusy" class="text-center">
-              <Loader />
-            </div>
-            <div v-else class="text-center">
-              {{ emptyText }}
-            </div>
-          </template>
-        </BTable>
-      </template>
-    </VirtualScroller>
     <BTable
-      v-else
       v-bind="tableProps"
       :items="isServerSide ? rowProvider : items"
       :busy.sync="isBusy"
@@ -158,11 +121,7 @@
 <script>
 import cloneDeep from 'lodash.clonedeep';
 import debounce from 'lodash.debounce';
-import orderBy from 'lodash.orderby';
-import some from 'lodash.some';
-import toLower from 'lodash.tolower';
 import { BTable, BPagination } from 'bootstrap-vue';
-import VirtualScroller from './VirtualScroller.vue';
 import Loader from '../Loader.vue';
 import TextInput from '../Form/TextInput.vue';
 import VueSelectInput from '../Form/VueSelectInput.vue';
@@ -197,10 +156,6 @@ export default {
       type: Boolean,
       default: false,
     },
-    shouldVirtualScroll: {
-      type: Boolean,
-      default: false,
-    },
     emptyText: {
       type: String,
       default: 'No data to display.',
@@ -231,7 +186,7 @@ export default {
       type: [Boolean, String],
     },
   },
-  components: { BTable, BPagination, Loader, TextInput, VirtualScroller, VueSelectInput },
+  components: { BTable, BPagination, Loader, TextInput, VueSelectInput },
   data() {
     return {
       sortBy: this.defaultSort || '',
@@ -256,12 +211,12 @@ export default {
     tableProps() {
       return {
         fields: this.tableColumns,
-        'sticky-header': this.shouldVirtualScroll ? false : this.height,
+        'sticky-header': this.height,
         busy: this.busy,
         'current-page': this.currentPage,
         'per-page': this.perPage,
         striped: true,
-        responsive: !this.shouldVirtualScroll,
+        responsive: true,
         'empty-text': this.emptyText,
         'show-empty': !!this.emptyText,
         'no-sort-reset': true,
@@ -314,9 +269,6 @@ export default {
       this.buildTableColumns();
       if (this.filterableFields.length) {
         this.buildFilterValues();
-      }
-      if (this.shouldVirtualScroll) {
-        this.calculateColumnWidths();
       }
     },
     rows() {
@@ -384,53 +336,10 @@ export default {
     setFilter: debounce(function (value) {
       this.filter = value;
     }, 500),
-    filterTable: debounce(function (e) {
-      // need to re-clone the object for when the user deletes filter term
-      let filterData = cloneDeep(this.rows);
-      // only filter if value is not blank
-      if (e.target.value !== '') {
-        filterData = filterData.filter((o) => some(o, (v) => toLower(v).indexOf(toLower(e.target.value)) > -1));
-      }
-      // set filteredRows to the filtered set
-      this.filteredRows = filterData;
-
-      // if table is currently sorted, maintain existing sort order
-      if (this.sortBy !== '') {
-        this.sortTable({ sortBy: this.sortBy, sortDesc: this.sortDesc });
-      }
-    }, 500),
     /* eslint-enable func-names */
-    onFiltered(filteredItems) {
-      // Trigger pagination to update the number of buttons/pages due to filtering
-      this.totalRows = filteredItems.length;
-      this.currentPage = 1;
-    },
     // Set currentPage to 1 when sorting
     changeSort() {
       this.currentPage = 1;
-    },
-    sortTable(ctx) {
-      this.filteredRows = orderBy(this.filteredRows, [ctx.sortBy], [ctx.sortDesc ? 'desc' : 'asc']);
-    },
-    calculateColumnWidths() {
-      // Reset layout and width to let table auto-render first
-      this.$refs.tableRef.$el.style.tableLayout = 'auto';
-      this.$refs.tableRef.$el.style.width = '100%';
-
-      // Wait for initial table to render using setTimeout, then set specific widths for each column
-      // Otherwise, column widths can quickly jump around while scrolling leading to less than ideal user experience
-      setTimeout(() => {
-        const headerEls = this.$refs.tableRef.$el.querySelectorAll('thead th');
-        const tableWidth = this.$refs.tableRef.$el.offsetWidth;
-        for (let i = 0; i < headerEls.length; i += 1) {
-          const headerWidth = headerEls[i].offsetWidth;
-          headerEls[i].style.width = `${(headerWidth / tableWidth) * 100}%`;
-        }
-        // Need to hard-code the full width of the table to still allow horizontal scrolling instead of squishing everything
-        this.$refs.tableRef.$el.style.width = `${tableWidth}px`;
-        // Need to set layout to fixed after hard-coding the widths, otherwise all cols will be equal width
-        this.$refs.tableRef.$el.style.tableLayout = 'fixed';
-      }, 50);
     },
     onResize() {
       this.windowWidth = window.innerWidth;
@@ -484,10 +393,6 @@ export default {
     if (this.filterableFields.length) {
       this.buildFilterValues();
       this.positionFilterRow();
-    }
-
-    if (this.shouldVirtualScroll) {
-      this.calculateColumnWidths();
     }
 
     this.$nextTick(() => {
