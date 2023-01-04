@@ -318,6 +318,7 @@ export default {
             tdClass: `${col.tdClass || 'text-center'} ${this.getHiddenColClass(col)}`,
             thClass: `${col.thClass || ''} ${this.getHiddenColClass(col)}`,
             sortable: col.sortable !== undefined ? col.sortable : true,
+            sortCompare: col.sortCompare,
             thAttr: col.thAttr, // { id: `tooltip-${col.key}` },
           });
         }
@@ -333,7 +334,7 @@ export default {
       this.tableColumns = columns;
     },
     /* eslint-disable func-names */
-    setFilter: debounce(function (value) {
+    setFilter: debounce(function(value) {
       this.filter = value;
     }, 500),
     /* eslint-enable func-names */
