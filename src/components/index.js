@@ -7,6 +7,7 @@ import SideNav from './SideNav.vue';
 import Table from './Table/Table.vue';
 import Tooltip from './Tooltip.vue';
 import TooltipQ from './TooltipQ.vue';
+import UsTable from './UsTable/UsTable.vue';
 
 // Form components
 import Checkbox from './Form/Checkbox.vue';
@@ -26,6 +27,7 @@ export {
   Table,
   Tooltip,
   TooltipQ,
+  UsTable,
   // Form components
   Checkbox,
   CheckboxRadioGroup,
