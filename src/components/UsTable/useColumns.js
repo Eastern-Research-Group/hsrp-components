@@ -95,7 +95,6 @@ const useColumns = (props) => {
   watch(
     () => [tableColumns.value, props.rows],
     () => {
-      console.log('should be updating widths...');
       if (table.value && props.rows?.length) {
         setColumnWidths();
       }
