@@ -93,6 +93,8 @@ const pageSlots = computed(() => {
 </template>
 
 <style scoped lang="scss">
+@import '../../styles/variables';
+
 .usa-pagination-container {
   display: flex;
   flex-wrap: wrap;

@@ -200,6 +200,8 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
 </template>
 
 <style scoped lang="scss">
+@import '../../styles/variables';
+
 .usa-table-container--responsive {
   overflow: auto;
 }
