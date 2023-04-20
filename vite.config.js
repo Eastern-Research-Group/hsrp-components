@@ -1,9 +1,9 @@
 import path from 'path';
 import { defineConfig, splitVendorChunkPlugin } from 'vite';
-import { createVuePlugin } from 'vite-plugin-vue2';
+import vue from '@vitejs/plugin-vue2';
 import visualizer from 'rollup-plugin-visualizer';
 
-export default defineConfig(() => {
+export default defineConfig(({ mode }) => {
   return {
     build: {
       // Setting code split to false for now until https://github.com/vitejs/vite/issues/3924 is fixed
@@ -27,7 +27,7 @@ export default defineConfig(() => {
         },
       },
     },
-    plugins: [createVuePlugin(), splitVendorChunkPlugin(), visualizer()],
+    plugins: [vue(), splitVendorChunkPlugin(), visualizer()],
     resolve: {
       alias: [
         {
@@ -37,6 +37,14 @@ export default defineConfig(() => {
         {
           find: '@',
           replacement: path.resolve(__dirname, 'src'),
+        },
+        // Use minified vue build on prod
+        {
+          find: 'vue',
+          replacement: path.resolve(
+            __dirname,
+            mode === 'prod' ? './node_modules/vue/dist/vue.min.js' : './node_modules/vue'
+          ),
         },
       ],
     },
