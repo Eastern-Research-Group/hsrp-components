@@ -110,6 +110,7 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
               :aria-sort="currentSortKey === column.key ? `${currentSortDir}ending` : false"
             >
               <slot v-if="$scopedSlots[`head(${column.key})`]" :name="`head(${column.key})`" :field="column" />
+              <slot v-else-if="$scopedSlots['head()']" name="head()" :field="column" />
               <span v-else>
                 {{ column.label }}
               </span>
@@ -153,9 +154,10 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                   :name="`cell(${column.key})`"
                   :item="row"
                   :value="row[column.key]"
+                  :index="index"
                 />
                 <span v-else>
-                  {{ row[column.key] }}
+                  {{ column.formatter ? column.formatter(row[column.key]) : row[column.key] }}
                 </span>
               </td>
             </tr>
