@@ -38,10 +38,31 @@ const useRows = (props) => {
 
     if (currentSortKey.value) {
       rows.sort((a, b) => {
+        const aVal = a[currentSortKey.value];
+        const bVal = b[currentSortKey.value];
+
         if (currentSortDir.value === 'asc') {
-          return a[currentSortKey.value]?.localeCompare(b[currentSortKey.value]);
+          if (typeof aVal === 'number') {
+            return aVal - bVal;
+          }
+          if (aVal === null || aVal === undefined) {
+            return -1;
+          }
+          if (bVal === null || bVal === undefined) {
+            return 1;
+          }
+          return aVal.localeCompare(bVal);
         }
-        return b[currentSortKey.value]?.localeCompare(a[currentSortKey.value]);
+        if (typeof bVal === 'number') {
+          return bVal - aVal;
+        }
+        if (aVal === null || aVal === undefined) {
+          return 1;
+        }
+        if (bVal === null || bVal === undefined) {
+          return -1;
+        }
+        return bVal.localeCompare(aVal);
       });
     }
 
