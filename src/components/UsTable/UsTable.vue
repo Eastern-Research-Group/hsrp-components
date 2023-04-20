@@ -225,12 +225,15 @@ table.usa-table {
     border: none;
     border-right: 1px solid color('gray-20');
     border-bottom: 1px solid color('gray-20');
-    padding-top: 0.5rem;
-    padding-bottom: 0.5rem;
+    z-index: 9;
   }
 
   td {
     border: none;
+  }
+
+  & th[data-sortable] {
+    padding-right: 2rem;
   }
 
   & th[data-sortable] .usa-table__header__button {
@@ -238,7 +241,7 @@ table.usa-table {
     width: calc(100% - 2px);
     height: calc(100% - 2px);
     text-align: right;
-    padding-right: 1rem;
+    padding-right: 0.75rem;
     word-wrap: normal;
   }
 
