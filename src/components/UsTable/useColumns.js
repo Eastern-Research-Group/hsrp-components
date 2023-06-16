@@ -82,7 +82,7 @@ const useColumns = (props) => {
     setTimeout(() => {
       if (!table.value) return;
 
-      const tableWidth = table.value.getBoundingClientRect().width;
+      const tableWidth = table.value.getBoundingClientRect().width - 2;
       tableColumns.value.forEach((column, index) => {
         const colEl = table.value.querySelector(`th[aria-colindex="${index + 1}"]`);
         if (colEl) {
