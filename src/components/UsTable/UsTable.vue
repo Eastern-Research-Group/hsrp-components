@@ -113,7 +113,14 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
               <span v-else>
                 {{ column.label }}
               </span>
-              <button v-if="column.sortable" class="usa-table__header__button" @click="sortTable(column.key)">
+              <button
+                v-if="column.sortable"
+                class="usa-table__header__button"
+                :aria-label="`Click to sort by ${column.label} in ${
+                  currentSortKey === column.key && currentSortDir === 'asc' ? 'descending' : 'ascending'
+                } order.`"
+                @click="sortTable(column.key)"
+              >
                 <span
                   :class="`fa ${
                     currentSortKey !== column.key
