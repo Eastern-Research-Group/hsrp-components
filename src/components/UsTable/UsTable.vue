@@ -1,5 +1,4 @@
 <script setup>
-import { ref } from 'vue';
 import { toggleArrayItem } from '../../utils/arrayHelper';
 import Button from '../Button.vue';
 import TextInput from '../Form/TextInput.vue';
@@ -152,6 +151,13 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                 <slot
                   v-else-if="$scopedSlots[`cell(${column.key})`]"
                   :name="`cell(${column.key})`"
+                  :item="row"
+                  :value="row[column.key]"
+                  :index="index"
+                />
+                <slot
+                  v-else-if="$scopedSlots['cell()']"
+                  name="cell()"
                   :item="row"
                   :value="row[column.key]"
                   :index="index"
