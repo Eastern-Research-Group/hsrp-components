@@ -206,6 +206,7 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
 
 .usa-table-container--responsive {
   overflow: auto;
+  border: 1px solid color('gray-10');
 }
 
 table.usa-table {
@@ -216,6 +217,11 @@ table.usa-table {
 
   &.usa-table--compact {
     font-size: size('sans', '3xs');
+
+    & th {
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+    }
   }
 
   thead th {
@@ -226,6 +232,10 @@ table.usa-table {
     border-right: 1px solid color('gray-20');
     border-bottom: 1px solid color('gray-20');
     z-index: 9;
+
+    &:last-child {
+      border-right: none;
+    }
   }
 
   td {
