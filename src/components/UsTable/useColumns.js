@@ -82,11 +82,11 @@ const useColumns = (props) => {
     setTimeout(() => {
       if (!table.value) return;
 
-      const tableWidth = table.value.getBoundingClientRect().width - 2;
+      const tableWidth = table.value.getBoundingClientRect().width;
       tableColumns.value.forEach((column, index) => {
         const colEl = table.value.querySelector(`th[aria-colindex="${index + 1}"]`);
         if (colEl) {
-          const colWidth = colEl.getBoundingClientRect().width; // the + 1 accounts for the border and avoids word breaking
+          const colWidth = colEl.getBoundingClientRect().width;
           colEl.style.width = `${(colWidth / tableWidth) * 100}%`;
         }
       });
