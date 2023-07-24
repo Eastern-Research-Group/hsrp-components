@@ -116,6 +116,7 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
               <button
                 v-if="column.sortable"
                 class="usa-table__header__button"
+                type="button"
                 :aria-label="`Click to sort by ${column.label} in ${
                   currentSortKey === column.key && currentSortDir === 'asc' ? 'descending' : 'ascending'
                 } order.`"
