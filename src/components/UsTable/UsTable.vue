@@ -195,7 +195,14 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                         <th class="text-right text-middle">{{ column.label }}</th>
                         <td :class="`text-left ${column.tdClass}`">
                           <!-- If slot is available for field, display slot content, otherwise display the value -->
-                          <slot v-if="$scopedSlots[`cell(${column.key})`]" :name="`cell(${column.key})`" v-bind="row" />
+                          <slot
+                            v-if="$scopedSlots[`cell(${column.key})`]"
+                            :name="`cell(${column.key})`"
+                            v-bind="row"
+                            :item="row"
+                            :value="row[column.key]"
+                            :index="index"
+                          />
                           <span v-else>
                             {{ row[column.key] }}
                           </span>
