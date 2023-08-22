@@ -140,7 +140,10 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
             </td>
           </tr>
           <template v-for="(row, index) in tableRows">
-            <tr :key="`row_${index}`">
+            <tr
+              :key="`row_${index}`"
+              :class="row.hasOwnProperty('highlightRow') && row.highlightRow ? 'highlight-row' : ''"
+            >
               <td
                 v-for="column in tableColumns"
                 :key="`${column.key}_row_${index}`"
@@ -279,6 +282,16 @@ table.usa-table {
 
   &[aria-busy='true'] {
     opacity: 0.6;
+  }
+
+  tr.highlight-row {
+    & td {
+      background-color: color('blue-cool-5v');
+    }
+
+    &:nth-child(odd) td {
+      background-color: color('blue-cool-10v');
+    }
   }
 }
 
