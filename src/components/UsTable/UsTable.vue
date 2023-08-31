@@ -5,6 +5,7 @@ import TextInput from '../Form/TextInput.vue';
 import UsPagination from './UsPagination.vue';
 import useColumns from './useColumns';
 import useRows from './useRows';
+import { nextTick, watch } from 'vue';
 
 const props = defineProps({
   columns: {
@@ -59,11 +60,58 @@ const props = defineProps({
   filterValue: {
     type: [String, Object],
   },
+  maxLines: {
+    type: Number,
+  },
 });
+
+const expandHandler = (event) => {
+  const inputElement = document.getElementById(event.target.id);
+  let labelElement = inputElement.previousElementSibling;
+  const title = event.target.checked ? 'Click to collapse cell content' : 'Click to expand cell content';
+  labelElement.setAttribute('title', title);
+};
+
+const isOverflown = ({ clientWidth, clientHeight, scrollWidth, scrollHeight }) => {
+  return scrollHeight > clientHeight || scrollWidth > clientWidth;
+};
 
 const { table, tableColumns, hiddenColumns } = useColumns(props);
 const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTable, tableRows, isTableBusy, filter } =
   useRows(props);
+
+watch([tableColumns, tableRows], () => {
+  document.querySelectorAll('.hsrp-us-table-expand-btn').forEach((el) => el.remove());
+  document.querySelectorAll('label').forEach((el) => {
+    if (
+      el.getAttribute('title') === 'Click to expand cell content' ||
+      el.getAttribute('title') === 'Click to collapse cell content'
+    ) {
+      return el.removeAttribute('title');
+    }
+  });
+
+  nextTick(() => {
+    const els = document.getElementsByClassName('hsrp-us-table-cutoff-text');
+    for (let i = 0; i < els.length; i++) {
+      let el = els[i];
+      if (isOverflown(el)) {
+        el.setAttribute('title', 'Click to expand cell content');
+        el.setAttribute('for', el.getAttribute('data-id'));
+
+        let input = document.createElement('input');
+        input.setAttribute('id', el.getAttribute('data-id'));
+        input.setAttribute('class', 'hsrp-us-table-expand-btn');
+        input.setAttribute('style', 'appearance: none !important; outline: none !important');
+        input.setAttribute('type', 'checkbox');
+        input.onclick = expandHandler;
+
+        const parent = el.parentElement;
+        parent.append(input);
+      }
+    }
+  });
+});
 </script>
 
 <template>
@@ -151,31 +199,49 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                 :data-sort-active="currentSortKey === column.key"
                 :data-label="column.label"
               >
-                <Button
-                  v-if="column.key === 'showAdditional'"
-                  class="expand-row-button"
-                  btnStyle="unstyled"
-                  :icon="expandedRowIndexes.includes(index) ? 'minus-circle' : 'plus-circle'"
-                  :title="expandedRowIndexes.includes(index) ? 'Collapse' : 'Expand additional columns'"
-                  @click="toggleArrayItem(expandedRowIndexes, index)"
-                />
-                <slot
-                  v-else-if="$scopedSlots[`cell(${column.key})`]"
-                  :name="`cell(${column.key})`"
-                  :item="row"
-                  :value="row[column.key]"
-                  :index="index"
-                />
-                <slot
-                  v-else-if="$scopedSlots['cell()']"
-                  name="cell()"
-                  :item="row"
-                  :value="row[column.key]"
-                  :index="index"
-                />
-                <span v-else>
-                  {{ column.formatter ? column.formatter(row[column.key]) : row[column.key] }}
-                </span>
+                <div :class="`${maxLines ? 'display-flex flex-row' : ''}`">
+                  <label
+                    class="hsrp-us-table-cutoff-text"
+                    :style="
+                      maxLines
+                        ? {
+                            overflow: 'hidden',
+                            display: '-webkit-box',
+                            '-webkit-line-clamp': maxLines,
+                            'line-clamp': maxLines,
+                            '-webkit-box-orient': 'vertical',
+                          }
+                        : {}
+                    "
+                    :data-id="`${column.key}_row_${index}`"
+                  >
+                    <Button
+                      v-if="column.key === 'showAdditional'"
+                      class="expand-row-button"
+                      btnStyle="unstyled"
+                      :icon="expandedRowIndexes.includes(index) ? 'minus-circle' : 'plus-circle'"
+                      :title="expandedRowIndexes.includes(index) ? 'Collapse' : 'Expand additional columns'"
+                      @click="toggleArrayItem(expandedRowIndexes, index)"
+                    />
+                    <slot
+                      v-else-if="$scopedSlots[`cell(${column.key})`]"
+                      :name="`cell(${column.key})`"
+                      :item="row"
+                      :value="row[column.key]"
+                      :index="index"
+                    />
+                    <slot
+                      v-else-if="$scopedSlots['cell()']"
+                      name="cell()"
+                      :item="row"
+                      :value="row[column.key]"
+                      :index="index"
+                    />
+                    <span v-else>
+                      {{ column.formatter ? column.formatter(row[column.key]) : row[column.key] }}
+                    </span>
+                  </label>
+                </div>
               </td>
             </tr>
             <template v-if="expandedRowIndexes.includes(index)">
@@ -413,5 +479,15 @@ tr:nth-child(odd) {
       width: auto;
     }
   }
+}
+.hsrp-us-table-expand-btn {
+  appearance: none;
+}
+.hsrp-us-table-cutoff-text:has(+ .hsrp-us-table-expand-btn:checked) {
+  overflow: visible !important;
+  display: block !important;
+}
+.hsrp-us-table-expand-btn:checked {
+  display: none;
 }
 </style>
