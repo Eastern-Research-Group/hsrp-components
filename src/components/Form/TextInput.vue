@@ -1,5 +1,5 @@
 <template>
-  <div :class="`usa-form-group ${errorMessage ? 'usa-form-group--error' : ''}`">
+  <div class="usa-form-group">
     <label :for="id" :class="`usa-label ${!label && srOnlyLabel ? 'sr-only' : ''}`">
       <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
@@ -13,17 +13,22 @@
       />
       <slot name="label"></slot>
     </label>
-    <span v-if="errorMessage" class="usa-error-message">{{ errorMessage }}</span>
-
     <textarea
       v-if="isTextArea"
-      class="usa-textarea"
+      :class="`usa-textarea ${errorMessage ? 'usa-input--error' : ''}`"
       :id="id"
       v-bind="{ ...$props, ...$attrs }"
       ref="textarea"
       @input="updateValue"
     />
-    <input v-else class="usa-input" :name="id" v-bind="{ ...$props, ...$attrs }" @input="updateValue" />
+    <input
+      v-else
+      :class="`usa-input ${errorMessage ? 'usa-input--error' : ''}`"
+      :name="id"
+      v-bind="{ ...$props, ...$attrs }"
+      @input="updateValue"
+    />
+    <span v-if="errorMessage" class="usa-error-message">{{ errorMessage }}</span>
   </div>
 </template>
 
@@ -127,5 +132,10 @@ export default {
   color: #222;
   border: none;
   background: none;
+}
+
+.usa-input--error {
+  border-width: 3px;
+  border-style: dashed;
 }
 </style>
