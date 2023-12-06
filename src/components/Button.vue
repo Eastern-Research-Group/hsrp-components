@@ -60,7 +60,6 @@ export default {
     text-decoration: none;
     margin: 0 0.25rem;
     padding: 0.25rem;
-    color: $blue;
 
     &.dark {
       color: $darkBlue;
