@@ -15,6 +15,7 @@
     "vue-tags.json"
   ],
   "dependencies": {
+    "@uswds/uswds": "^3.7.0",
     "bootstrap": "^4.4.1",
     "bootstrap-vue": "^2.21.0",
     "lodash.clonedeep": "^4.5.0",
@@ -22,7 +23,6 @@
     "lodash.orderby": "^4.5.0",
     "lodash.some": "^4.5.0",
     "lodash.tolower": "^4.1.2",
-    "uswds": "^2.13.3",
     "vue": "2.7.14",
     "vue-select": "^3.4.0"
   },
