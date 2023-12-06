@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { Tooltip } from 'hsrp-components';
+import Tooltip from './Tooltip.vue';
 
 export default {
   name: 'TooltipQ',
@@ -18,28 +18,9 @@ export default {
       type: String,
       required: true,
     },
-    label: {
-      type: String,
-    },
     description: {
       type: String,
       required: true,
-    },
-    placement: {
-      type: String,
-      default: 'top',
-    },
-    tooltipOnly: {
-      type: Boolean,
-      default: false,
-    },
-    iconOnly: {
-      type: Boolean,
-      default: false,
-    },
-    triggers: {
-      type: String,
-      default: 'hover focus',
     },
   },
   components: { Tooltip },
