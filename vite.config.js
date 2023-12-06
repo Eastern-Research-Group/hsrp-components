@@ -48,5 +48,12 @@ export default defineConfig(({ mode }) => {
         },
       ],
     },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          includePaths: ['./node_modules/@uswds/uswds/packages'],
+        },
+      },
+    },
   };
 });
