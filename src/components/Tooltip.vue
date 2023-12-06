@@ -3,7 +3,15 @@
     <abbr v-if="!tooltipOnly && !iconOnly" class="tooltip-label" :id="id" :title="description" tabindex="0">{{
       label
     }}</abbr>
-    <span v-else-if="iconOnly" class="fa fa-info-circle" :id="id" :title="description" tabindex="0"></span>
+    <span
+      v-else-if="iconOnly"
+      :class="`fa fa-${icon}`"
+      :id="id"
+      :title="description"
+      tabindex="0"
+      @click="$emit('onClickIcon')"
+      @keyup.enter="$emit('onClickIcon')"
+    ></span>
     <BTooltip :target="id" :triggers="triggers" :placement="placement" boundary="window" :delay="delay">
       {{ description }}
     </BTooltip>
@@ -39,6 +47,10 @@ export default {
       type: Boolean,
       default: false,
     },
+    icon: {
+      type: String,
+      default: 'info-circle',
+    },
     triggers: {
       type: String,
       default: 'hover focus',
@@ -68,12 +80,13 @@ export default {
 
 <style lang="scss">
 .tooltip {
+  transition-duration: unset !important;
   position: absolute;
   z-index: 1070;
   display: block;
   margin: 0;
   font-style: normal;
-  font-weight: 400;
+  font-weight: normal;
   line-height: 1.5;
   text-align: left;
   text-align: start;
@@ -85,7 +98,6 @@ export default {
   word-spacing: normal;
   white-space: normal;
   line-break: auto;
-  font-size: 0.875rem;
   word-wrap: break-word;
   opacity: 0;
 }
@@ -187,6 +199,8 @@ export default {
   text-align: center;
   background-color: #000;
   border-radius: 0.25rem;
+  font-size: 1rem;
+  font-weight: normal;
 }
 
 .tooltip.b-tooltip {
