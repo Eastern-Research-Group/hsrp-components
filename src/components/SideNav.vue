@@ -19,9 +19,8 @@
                 index > 0 ? getLinkClass(item.path) : index === 0 && $route.path === item.path ? 'usa-current' : ''
               "
             >
-              <span v-if="item.leftIcon" :class="`fa ${item.leftIcon}`"></span>
-              {{ item.title }}
-              <span v-if="item.rightIcon" :class="`fa ${item.rightIcon}`"></span>
+              <span v-if="item.leftIcon" :class="`left-icon fa ${item.leftIcon}`"></span>
+              {{ item.title }}<span v-if="item.rightIcon" :class="`right-icon fa ${item.rightIcon}`"></span>
             </router-link>
             <a v-else :class="getLinkClass(item.path)">{{ item.title }}</a>
             <ul v-if="item.items" class="usa-sidenav__sublist">
@@ -92,7 +91,15 @@ export default {
     top: 0;
     max-height: 100vh;
     overflow: auto;
-    padding: 1rem 0;
+    padding: 1rem 0.25rem;
+    margin: 0 -0.25rem;
+  }
+
+  .left-icon {
+    margin-right: 0.25rem;
+  }
+  .right-icon {
+    margin-left: 0.25rem;
   }
 }
 
