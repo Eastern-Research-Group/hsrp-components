@@ -59,6 +59,9 @@ const props = defineProps({
   filterValue: {
     type: [String, Object],
   },
+  autoWidthColumns: {
+    type: Boolean,
+  },
 });
 
 const { table, tableColumns, hiddenColumns } = useColumns(props);

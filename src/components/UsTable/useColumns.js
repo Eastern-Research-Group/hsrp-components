@@ -71,6 +71,11 @@ const useColumns = (props) => {
 
   // Set fixed widths after initial render so columns don't move around on pagination or sorting
   const setColumnWidths = () => {
+    // Skip manual width setting if autoWidthColumns is passed
+    if (props.autoWidthColumns) {
+      return;
+    }
+
     table.value.style.width = 'auto';
     table.value.style.tableLayout = 'auto';
     tableColumns.value.forEach((column, index) => {
