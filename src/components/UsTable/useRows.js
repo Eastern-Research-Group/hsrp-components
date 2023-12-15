@@ -37,9 +37,18 @@ const useRows = (props) => {
     }
 
     if (currentSortKey.value) {
+      const column = props.columns.find((col) => col.key === currentSortKey.value);
       rows.sort((a, b) => {
-        const aVal = a[currentSortKey.value];
-        const bVal = b[currentSortKey.value];
+        // If value is an object, column should have sortObjectKey to get the correct key to sort on
+        const values = {
+          aVal: a[currentSortKey.value],
+          bVal: b[currentSortKey.value],
+        };
+        if (column && column.sortObjectKey) {
+          values.aVal = a[currentSortKey.value]?.[column.sortObjectKey];
+          values.bVal = b[currentSortKey.value]?.[column.sortObjectKey];
+        }
+        const { aVal, bVal } = values;
 
         if (currentSortDir.value === 'asc') {
           if (typeof aVal === 'number') {
