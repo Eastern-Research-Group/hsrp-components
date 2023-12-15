@@ -22,7 +22,7 @@
               <span v-if="item.leftIcon" :class="`left-icon fa ${item.leftIcon}`"></span>
               {{ item.title }}<span v-if="item.rightIcon" :class="`right-icon fa ${item.rightIcon}`"></span>
             </router-link>
-            <a v-else :class="getLinkClass(item.path)">{{ item.title }}</a>
+            <a v-else :class="getLinkClass(item.path)" aria-disabled="true">{{ item.title }}</a>
             <ul v-if="item.items" class="usa-sidenav__sublist">
               <li v-for="subItem in item.items" class="usa-sidenav__item" :key="subItem.path">
                 <router-link

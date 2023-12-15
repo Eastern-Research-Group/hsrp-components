@@ -48,6 +48,7 @@ const pageSlots = computed(() => {
             href="javascript:void(0);"
             class="usa-pagination__link usa-pagination__previous-page"
             aria-label="Previous page"
+            :aria-disabled="currentPage === 1"
             :disabled="currentPage === 1"
             :tabindex="currentPage === 1 ? -1 : 0"
             @click="currentPage !== 1 && $emit('changePage', currentPage - 1)"
@@ -77,6 +78,7 @@ const pageSlots = computed(() => {
             href="javascript:void(0);"
             class="usa-pagination__link usa-pagination__next-page"
             aria-label="Next page"
+            :aria-disabled="currentPage === lastPage"
             :disabled="currentPage === lastPage"
             :tabindex="currentPage === lastPage ? -1 : 0"
             @click="currentPage !== lastPage && $emit('changePage', currentPage + 1)"
@@ -107,6 +109,12 @@ const pageSlots = computed(() => {
 
 .usa-pagination__list {
   padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.usa-pagination__button,
+.usa-pagination__link {
+  text-decoration: none;
 }
 
 a.usa-pagination__link:hover {
