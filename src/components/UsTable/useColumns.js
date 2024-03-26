@@ -80,7 +80,9 @@ const useColumns = (props) => {
     table.value.style.tableLayout = 'auto';
     tableColumns.value.forEach((column, index) => {
       const colEl = table.value.querySelector(`th[aria-colindex="${index + 1}"]`);
-      if (colEl) {
+      if (colEl && column.width) {
+        colEl.style.width = column.width;
+      } else if (colEl) {
         colEl.style.width = 'auto';
       }
     });
@@ -102,7 +104,7 @@ const useColumns = (props) => {
   watch(
     () => [tableColumns.value, props.rows],
     () => {
-      if (table.value && props.rows?.length) {
+      if (table.value && (props.rows?.length || typeof props.rowProvider === 'function')) {
         setColumnWidths();
       }
     }
