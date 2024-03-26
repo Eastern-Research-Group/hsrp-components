@@ -38,7 +38,7 @@ const useRows = (props) => {
 
     if (currentSortKey.value) {
       const column = props.columns.find((col) => col.key === currentSortKey.value);
-      rows.sort((a, b) => {
+      const sortRows = (a, b) => {
         // If value is an object, column should have sortObjectKey to get the correct key to sort on
         const values = {
           aVal: a[currentSortKey.value],
@@ -72,7 +72,9 @@ const useRows = (props) => {
           return -1;
         }
         return bVal.localeCompare(aVal);
-      });
+      };
+      // If custom sort function is in column def, use instead of default sortRows above
+      rows.sort(column.sortCompare ?? sortRows);
     }
 
     if (!props.perPage) {
