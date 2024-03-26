@@ -267,10 +267,15 @@ table.usa-table {
 
   td {
     border: none;
+
+    & > span {
+      display: block;
+      max-width: 300px;
+    }
   }
 
   & th[data-sortable] {
-    padding-right: 2rem;
+    padding-right: 1.5rem;
   }
 
   & th[data-sortable] .usa-table__header__button {
@@ -278,7 +283,7 @@ table.usa-table {
     width: calc(100% - 2px);
     height: calc(100% - 2px);
     text-align: right;
-    padding-right: 0.75rem;
+    padding-right: 0.5rem;
     word-wrap: normal;
   }
 
