@@ -14,6 +14,9 @@ const props = defineProps({
   rows: {
     type: Array,
   },
+  footerRows: {
+    type: Array,
+  },
   height: {
     type: String,
     default: '500px',
@@ -218,6 +221,25 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
             </template>
           </template>
         </tbody>
+        <tfoot v-if="footerRows?.length">
+          <template v-for="(row, index) in footerRows">
+            <tr
+              :key="`row_${index}`"
+              :class="row.hasOwnProperty('highlightRow') && row.highlightRow ? 'highlight-row' : ''"
+            >
+              <td
+                v-for="column in tableColumns"
+                :key="`${column.key}_footer_${index}`"
+                :class="column.tdClass"
+                :data-label="column.label"
+              >
+                <span>
+                  {{ column.formatter ? column.formatter(row[column.key]) : row[column.key] }}
+                </span>
+              </td>
+            </tr>
+          </template>
+        </tfoot>
       </table>
     </div>
     <UsPagination
