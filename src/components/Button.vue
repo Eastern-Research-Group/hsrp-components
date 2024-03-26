@@ -70,7 +70,7 @@ export default {
     }
   }
 
-  &--success {
+  &--success:not([disabled]) {
     background-color: $bgGreen;
 
     &:hover {

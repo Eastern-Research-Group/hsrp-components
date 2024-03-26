@@ -74,7 +74,7 @@ export default {
 
   ul {
     padding-left: 1.5rem;
-    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
   }
 
   p {

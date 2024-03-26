@@ -163,7 +163,7 @@ export default {
   }
 
   &.vs--single .vs__selected {
-    max-width: calc(100% - 14px);
+    max-width: calc(100% - 15px);
 
     & + .vs__search {
       width: 0;
