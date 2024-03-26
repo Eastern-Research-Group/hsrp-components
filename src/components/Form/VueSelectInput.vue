@@ -12,6 +12,7 @@
       v-bind="{ ...inputProps, ...vueSelectProps, inputId: id, options: vueSelectOptions }"
       :selectable="(option) => (areGroupsSelectable ? true : !option.group)"
       @input="$emit('input', $event)"
+      @search="$emit('search', $event)"
     >
       <template #search="{ attributes, events }">
         <input
@@ -27,6 +28,9 @@
         </span>
         {{ option[vueSelectProps.label || inputProps.label || 'label'] }}
         {{ option.append }}
+      </template>
+      <template #selected-option="value">
+        <slot name="selected-option" :value="value" />
       </template>
       <span slot="no-options" class="no-options-msg">{{ vueSelectProps.noOptionsMsg || 'No matching options.' }}</span>
     </VueSelect>
