@@ -162,7 +162,7 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                   class="expand-row-button"
                   btnStyle="unstyled"
                   :icon="expandedRowIndexes.includes(index) ? 'minus-circle' : 'plus-circle'"
-                  :title="expandedRowIndexes.includes(index) ? 'Collapse' : 'Expand additional columns'"
+                  :title="expandedRowIndexes.includes(index) ? 'Collapse' : column.label ?? 'Expand additional columns'"
                   @click="toggleArrayItem(expandedRowIndexes, index)"
                 />
                 <slot
@@ -188,7 +188,8 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
               <tr aria-hidden="true" role="presentation" class="display-none" :key="`hidden_${index}`"></tr>
               <tr :key="`expanded_${index}`" tabindex="-1">
                 <td :colspan="tableColumns.length">
-                  <table class="expanded-fields">
+                  <slot v-if="$scopedSlots['expanded']" name="expanded" :item="row" :index="index" />
+                  <table v-else class="expanded-fields">
                     <thead class="display-none">
                       <tr>
                         <th v-for="column in hiddenColumns" :key="`th-${column.key}`" scope="col">
