@@ -30,11 +30,6 @@ export default {
 <style lang="scss" scoped>
 @import '../styles/variables';
 
-.tooltip-label {
-  text-decoration: none;
-  border-bottom: 1px dashed color('base-darker');
-}
-
 ::v-deep .fa-question-circle {
   cursor: pointer;
   color: color('primary-light');

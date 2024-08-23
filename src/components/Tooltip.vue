@@ -1,233 +1,177 @@
-<template>
-  <span class="hsrp-tooltip">
-    <abbr v-if="!tooltipOnly && !iconOnly" class="tooltip-label" :id="id" :title="description" tabindex="0">{{
-      label
-    }}</abbr>
-    <span
-      v-else-if="iconOnly"
-      :class="`fa fa-${icon}`"
-      :id="id"
-      :title="description"
-      tabindex="0"
-      @click="$emit('onClickIcon')"
-      @keyup.enter="$emit('onClickIcon')"
-    ></span>
-    <BTooltip :target="id" :triggers="triggers" :placement="placement" boundary="window" :delay="delay">
-      {{ description }}
-    </BTooltip>
-  </span>
-</template>
+<script setup>
+import { onMounted, ref } from 'vue';
+import { createPopper } from '@popperjs/core';
 
-<script>
-import { BTooltip } from 'bootstrap-vue';
-
-export default {
-  name: 'Tooltip',
-  props: {
-    id: {
-      type: String,
-      required: true,
-    },
-    label: {
-      type: String,
-    },
-    description: {
-      type: String,
-      required: true,
-    },
-    placement: {
-      type: String,
-      default: 'top',
-    },
-    tooltipOnly: {
-      type: Boolean,
-      default: false,
-    },
-    iconOnly: {
-      type: Boolean,
-      default: false,
-    },
-    icon: {
-      type: String,
-      default: 'info-circle',
-    },
-    triggers: {
-      type: String,
-      default: 'hover focus',
-    },
-    delay: {
-      type: String,
-      default: '300',
-    },
+const props = defineProps({
+  id: {
+    type: String,
+    required: true,
   },
-  components: { BTooltip },
+  label: {
+    type: String,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  placement: {
+    type: String,
+    default: 'top',
+  },
+  tooltipOnly: {
+    type: Boolean,
+    default: false,
+  },
+  iconOnly: {
+    type: Boolean,
+    default: false,
+  },
+  icon: {
+    type: String,
+    default: 'info-circle',
+  },
+  delay: {
+    type: Number,
+    default: 300,
+  },
+});
+const emit = defineEmits(['onClickIcon']);
+
+const popperInstance = ref();
+const hoverEl = ref();
+const tooltip = ref(null);
+
+const show = () => {
+  // Make the tooltip visible
+  tooltip.value?.setAttribute('data-show', '');
+
+  // Enable the event listeners
+  popperInstance.value.setOptions((options) => ({
+    ...options,
+    modifiers: [...options.modifiers, { name: 'eventListeners', enabled: true }],
+  }));
+
+  // Update its position
+  popperInstance.value.update();
 };
+
+const hide = () => {
+  // Hide the tooltip
+  tooltip.value.removeAttribute('data-show');
+
+  // Disable the event listeners
+  popperInstance.value.setOptions((options) => ({
+    ...options,
+    modifiers: [...options.modifiers, { name: 'eventListeners', enabled: false }],
+  }));
+};
+
+onMounted(() => {
+  hoverEl.value = document.getElementById(props.id);
+  popperInstance.value = createPopper(hoverEl.value, tooltip.value, {
+    placement: props.placement,
+    strategy: 'fixed',
+    modifiers: [
+      {
+        name: 'offset',
+        options: {
+          offset: [0, 8],
+        },
+      },
+    ],
+  });
+
+  const showEvents = ['mouseenter', 'focus'];
+  const hideEvents = ['mouseleave', 'blur'];
+
+  showEvents.forEach((event) => {
+    hoverEl.value.addEventListener(event, () => setTimeout(show, props.delay));
+  });
+
+  hideEvents.forEach((event) => {
+    hoverEl.value.addEventListener(event, () => setTimeout(hide, props.delay / 2));
+  });
+});
 </script>
+
+<template>
+  <div>
+    <component
+      v-if="iconOnly || !tooltipOnly"
+      :is="iconOnly ? 'span' : 'abbr'"
+      :class="iconOnly ? `fa fa-${icon}` : 'hsrp-tooltip-label'"
+      :id="id"
+      :aria-label="description"
+      tabindex="0"
+      @click="emit('onClickIcon')"
+      @keyup.enter="emit('onClickIcon')"
+    >
+      {{ iconOnly ? '' : label }}
+    </component>
+    <div ref="tooltip" class="hsrp-tooltip" role="tooltip">
+      {{ description }}
+      <div class="tooltip-arrow" data-popper-arrow></div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 @import '../styles/variables';
 
-.tooltip-label {
+.hsrp-tooltip-label {
   text-decoration: none;
   border-bottom: 1px dashed color('base-darker');
 }
-
 .fa-info-circle {
   cursor: pointer;
   color: $blue;
 }
-</style>
 
-<style lang="scss">
-.tooltip {
-  transition-duration: unset !important;
-  position: absolute;
-  z-index: 1070;
-  display: block;
-  margin: 0;
-  font-style: normal;
-  font-weight: normal;
-  line-height: 1.5;
-  text-align: left;
-  text-align: start;
-  text-decoration: none;
-  text-shadow: none;
-  text-transform: none;
-  letter-spacing: normal;
-  word-break: normal;
-  word-spacing: normal;
-  white-space: normal;
-  line-break: auto;
-  word-wrap: break-word;
-  opacity: 0;
-}
-
-.tooltip.show {
-  opacity: 0.9;
-}
-
-.tooltip .arrow {
-  position: absolute;
-  display: block;
-  width: 0.8rem;
-  height: 0.4rem;
-}
-
-.tooltip .arrow::before {
-  position: absolute;
-  content: '';
-  border-color: transparent;
-  border-style: solid;
-}
-
-.bs-tooltip-top,
-.bs-tooltip-auto[x-placement^='top'] {
-  padding: 0.4rem 0;
-}
-
-.bs-tooltip-top .arrow,
-.bs-tooltip-auto[x-placement^='top'] .arrow {
-  bottom: 0;
-}
-
-.bs-tooltip-top .arrow::before,
-.bs-tooltip-auto[x-placement^='top'] .arrow::before {
-  top: 0;
-  border-width: 0.4rem 0.4rem 0;
-  border-top-color: #000;
-}
-
-.bs-tooltip-right,
-.bs-tooltip-auto[x-placement^='right'] {
-  padding: 0 0.4rem;
-}
-
-.bs-tooltip-right .arrow,
-.bs-tooltip-auto[x-placement^='right'] .arrow {
-  left: 0;
-  width: 0.4rem;
-  height: 0.8rem;
-}
-
-.bs-tooltip-right .arrow::before,
-.bs-tooltip-auto[x-placement^='right'] .arrow::before {
-  right: 0;
-  border-width: 0.4rem 0.4rem 0.4rem 0;
-  border-right-color: #000;
-}
-
-.bs-tooltip-bottom,
-.bs-tooltip-auto[x-placement^='bottom'] {
-  padding: 0.4rem 0;
-}
-
-.bs-tooltip-bottom .arrow,
-.bs-tooltip-auto[x-placement^='bottom'] .arrow {
-  top: 0;
-}
-
-.bs-tooltip-bottom .arrow::before,
-.bs-tooltip-auto[x-placement^='bottom'] .arrow::before {
-  bottom: 0;
-  border-width: 0 0.4rem 0.4rem;
-  border-bottom-color: #000;
-}
-
-.bs-tooltip-left,
-.bs-tooltip-auto[x-placement^='left'] {
-  padding: 0 0.4rem;
-}
-
-.bs-tooltip-left .arrow,
-.bs-tooltip-auto[x-placement^='left'] .arrow {
-  right: 0;
-  width: 0.4rem;
-  height: 0.8rem;
-}
-
-.bs-tooltip-left .arrow::before,
-.bs-tooltip-auto[x-placement^='left'] .arrow::before {
-  left: 0;
-  border-width: 0.4rem 0 0.4rem 0.4rem;
-  border-left-color: #000;
-}
-
-.tooltip-inner {
-  max-width: 200px;
-  padding: 0.25rem 0.5rem;
+// Popper.js styles
+.hsrp-tooltip {
+  background: #000;
   color: #fff;
+  max-width: 300px;
   text-align: center;
-  background-color: #000;
-  border-radius: 0.25rem;
-  font-size: 1rem;
+  padding: 5px 10px;
+  font-size: size('body', '2xs');
   font-weight: normal;
+  border-radius: 4px;
+  display: none;
+  z-index: 999;
+  opacity: 0.9;
+  // Improtant override of uswds default
+  transition-duration: 0ms;
 }
-
-.tooltip.b-tooltip {
+.hsrp-tooltip[data-show] {
   display: block;
-  opacity: 0.9;
-  outline: 0;
 }
-
-.tooltip.b-tooltip.fade:not(.show) {
-  opacity: 0;
+.tooltip-arrow,
+.tooltip-arrow::before {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: inherit;
 }
-
-.tooltip.b-tooltip.show {
-  opacity: 0.9;
+.tooltip-arrow {
+  visibility: hidden;
+  transition-duration: 0ms;
 }
-
-.tooltip.b-tooltip.noninteractive,
-.hsrp-tooltip .fa-info-circle {
-  pointer-events: none;
+.tooltip-arrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
 }
-
-.tooltip.b-tooltip .arrow {
-  margin: 0 0.25rem;
+.hsrp-tooltip[data-popper-placement^='top'] > .tooltip-arrow {
+  bottom: -4px;
 }
-
-.tooltip.b-tooltip.bs-tooltip-right .arrow,
-.tooltip.b-tooltip.bs-tooltip-left .arrow {
-  margin: 0.25rem 0;
+.hsrp-tooltip[data-popper-placement^='bottom'] > .tooltip-arrow {
+  top: -4px;
+}
+.hsrp-tooltip[data-popper-placement^='left'] > .tooltip-arrow {
+  right: -4px;
+}
+.hsrp-tooltip[data-popper-placement^='right'] > .tooltip-arrow {
+  left: -4px;
 }
 </style>
