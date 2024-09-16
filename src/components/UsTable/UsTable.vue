@@ -84,7 +84,7 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
     <div class="usa-table-container--responsive" tabindex="0" :style="{ maxHeight: height }">
       <table
         :class="`usa-table usa-table--striped usa-table--borderless ${compact ? 'usa-table--compact' : ''}`"
-        :aria-busy="isTableBusy"
+        :aria-busy="isTableBusy ? true : null"
         ref="table"
       >
         <caption v-if="caption">
@@ -112,10 +112,10 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                     }`
                   : ''
               }`"
-              :aria-sort="currentSortKey === column.key ? `${currentSortDir}ending` : false"
+              :aria-sort="currentSortKey === column.key ? `${currentSortDir}ending` : null"
             >
-              <slot v-if="$scopedSlots[`head(${column.key})`]" :name="`head(${column.key})`" :field="column" />
-              <slot v-else-if="$scopedSlots['head()']" name="head()" :field="column" />
+              <slot v-if="$slots[`head(${column.key})`]" :name="`head(${column.key})`" :field="column" />
+              <slot v-else-if="$slots['head()']" name="head()" :field="column" />
               <span v-else>
                 {{ column.label }}
               </span>
@@ -145,16 +145,13 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
               {{ emptyText }}
             </td>
           </tr>
-          <template v-for="(row, index) in tableRows">
-            <tr
-              :key="`row_${index}`"
-              :class="row.hasOwnProperty('highlightRow') && row.highlightRow ? 'highlight-row' : ''"
-            >
+          <template v-for="(row, index) in tableRows" :key="`row_${index}`">
+            <tr :class="row.hasOwnProperty('highlightRow') && row.highlightRow ? 'highlight-row' : ''">
               <td
                 v-for="column in tableColumns"
                 :key="`${column.key}_row_${index}`"
                 :class="column.tdClass"
-                :data-sort-active="currentSortKey === column.key"
+                :data-sort-active="currentSortKey === column.key ? true : null"
                 :data-label="column.label"
               >
                 <Button
@@ -162,23 +159,19 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                   class="expand-row-button"
                   btnStyle="unstyled"
                   :icon="expandedRowIndexes.includes(index) ? 'minus-circle' : 'plus-circle'"
-                  :title="expandedRowIndexes.includes(index) ? 'Collapse' : column.label ?? 'Expand additional columns'"
+                  :title="
+                    expandedRowIndexes.includes(index) ? 'Collapse' : (column.label ?? 'Expand additional columns')
+                  "
                   @click="toggleArrayItem(expandedRowIndexes, index)"
                 />
                 <slot
-                  v-else-if="$scopedSlots[`cell(${column.key})`]"
+                  v-else-if="$slots[`cell(${column.key})`]"
                   :name="`cell(${column.key})`"
                   :item="row"
                   :value="row[column.key]"
                   :index="index"
                 />
-                <slot
-                  v-else-if="$scopedSlots['cell()']"
-                  name="cell()"
-                  :item="row"
-                  :value="row[column.key]"
-                  :index="index"
-                />
+                <slot v-else-if="$slots['cell()']" name="cell()" :item="row" :value="row[column.key]" :index="index" />
                 <span v-else>
                   {{ column.formatter ? column.formatter(row[column.key]) : row[column.key] }}
                 </span>
@@ -188,7 +181,7 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
               <tr aria-hidden="true" role="presentation" class="display-none" :key="`hidden_${index}`"></tr>
               <tr :key="`expanded_${index}`" tabindex="-1">
                 <td :colspan="tableColumns.length">
-                  <slot v-if="$scopedSlots['expanded']" name="expanded" :item="row" :index="index" />
+                  <slot v-if="$slots['expanded']" name="expanded" :item="row" :index="index" />
                   <table v-else class="expanded-fields">
                     <thead class="display-none">
                       <tr>
@@ -203,9 +196,9 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                         <td :class="`text-left ${column.tdClass}`">
                           <!-- If slot is available for field, display slot content, otherwise display the value -->
                           <slot
-                            v-if="$scopedSlots[`cell(${column.key})`]"
-                            :name="`cell(${column.key})`"
+                            v-if="$slots[`cell(${column.key})`]"
                             v-bind="row"
+                            :name="`cell(${column.key})`"
                             :item="row"
                             :value="row[column.key]"
                             :index="index"
@@ -223,11 +216,8 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
           </template>
         </tbody>
         <tfoot v-if="footerRows?.length">
-          <template v-for="(row, index) in footerRows">
-            <tr
-              :key="`row_${index}`"
-              :class="row.hasOwnProperty('highlightRow') && row.highlightRow ? 'highlight-row' : ''"
-            >
+          <template v-for="(row, index) in footerRows" :key="`row_${index}`">
+            <tr :class="row.hasOwnProperty('highlightRow') && row.highlightRow ? 'highlight-row' : ''">
               <td
                 v-for="column in tableColumns"
                 :key="`${column.key}_footer_${index}`"
@@ -302,12 +292,18 @@ table.usa-table {
   }
 
   & th[data-sortable] .usa-table__header__button {
+    position: absolute;
+    background: none;
+    border: none;
+    top: 0;
     left: 1px;
     width: calc(100% - 2px);
     height: calc(100% - 2px);
     text-align: right;
     padding-right: 0.5rem;
     word-wrap: normal;
+    transform: none;
+    cursor: pointer;
   }
 
   .no-data-message > td {
@@ -434,7 +430,7 @@ tr:nth-child(odd) {
   align-items: center;
   margin: 0.5rem 0;
 
-  ::v-deep {
+  :deep() {
     .usa-label {
       margin-right: 0.5rem;
     }

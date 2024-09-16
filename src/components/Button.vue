@@ -28,7 +28,7 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: false,
+      default: null,
     },
     btnStyle: {
       validator(value) {
@@ -45,6 +45,7 @@ export default {
       default: false,
     },
   },
+  emits: ['click'],
   components: { Loader },
 };
 </script>

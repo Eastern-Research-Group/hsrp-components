@@ -48,8 +48,8 @@ const pageSlots = computed(() => {
             href="javascript:void(0);"
             class="usa-pagination__link usa-pagination__previous-page"
             aria-label="Previous page"
-            :aria-disabled="currentPage === 1"
-            :disabled="currentPage === 1"
+            :aria-disabled="currentPage === 1 ? true : null"
+            :disabled="currentPage === 1 ? true : null"
             :tabindex="currentPage === 1 ? -1 : 0"
             @click="currentPage !== 1 && $emit('changePage', currentPage - 1)"
           >
@@ -78,8 +78,8 @@ const pageSlots = computed(() => {
             href="javascript:void(0);"
             class="usa-pagination__link usa-pagination__next-page"
             aria-label="Next page"
-            :aria-disabled="currentPage === lastPage"
-            :disabled="currentPage === lastPage"
+            :aria-disabled="currentPage === lastPage ? true : null"
+            :disabled="currentPage === lastPage ? true : null"
             :tabindex="currentPage === lastPage ? -1 : 0"
             @click="currentPage !== lastPage && $emit('changePage', currentPage + 1)"
             ><span class="usa-pagination__link-text">Next </span> <span class="fa fa-chevron-right"></span

@@ -30,7 +30,7 @@ export default {
 <style lang="scss" scoped>
 @import '../styles/variables';
 
-::v-deep .fa-question-circle {
+:deep() .fa-question-circle {
   cursor: pointer;
   color: color('primary-light');
 }

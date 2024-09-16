@@ -46,6 +46,7 @@ export default {
       type: String,
     },
   },
+  emits: ['change'],
 };
 </script>
 

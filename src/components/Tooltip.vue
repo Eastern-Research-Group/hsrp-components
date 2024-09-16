@@ -95,7 +95,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div>
+  <span>
     <component
       v-if="iconOnly || !tooltipOnly"
       :is="iconOnly ? 'span' : 'abbr'"
@@ -112,7 +112,7 @@ onMounted(() => {
       {{ description }}
       <div class="tooltip-arrow" data-popper-arrow></div>
     </div>
-  </div>
+  </span>
 </template>
 
 <style lang="scss" scoped>
