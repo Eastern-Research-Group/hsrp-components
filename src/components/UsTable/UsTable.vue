@@ -145,6 +145,9 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
               {{ emptyText }}
             </td>
           </tr>
+          <tr v-if="$slots['top-row']" class="top-row">
+            <slot name="top-row" :fields="tableColumns" />
+          </tr>
           <template v-for="(row, index) in tableRows" :key="`row_${index}`">
             <tr :class="row.hasOwnProperty('highlightRow') && row.highlightRow ? 'highlight-row' : ''">
               <td
