@@ -140,13 +140,13 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
           </tr>
         </thead>
         <tbody>
+          <tr v-if="$slots['top-row']" class="top-row">
+            <slot name="top-row" :fields="tableColumns" />
+          </tr>
           <tr v-if="tableRows.length === 0" class="no-data-message">
             <td :colspan="tableColumns.length">
               {{ emptyText }}
             </td>
-          </tr>
-          <tr v-if="$slots['top-row']" class="top-row">
-            <slot name="top-row" :fields="tableColumns" />
           </tr>
           <template v-for="(row, index) in tableRows" :key="`row_${index}`">
             <tr :class="row.hasOwnProperty('highlightRow') && row.highlightRow ? 'highlight-row' : ''">
