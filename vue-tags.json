@@ -46,7 +46,7 @@
   "Table": {
     "attributes": ["columns", "rows", "height", "rowHeight", "defaultSort", "busy", "perPage", "shouldDisplayFilter", "shouldVirtualScroll", "emptyText", "rowProvider", "apiUrl", "total", "tableFilter"],
     "defaults": ["columns", "rows"],
-    "description": "Sortable, filterable, paginating table based on BootstrapVue table"
+    "description": "Sortable, filterable, paginating table"
   },
   "TextInput": {
     "attributes": ["id", "label", "srOnlyLabel", "type", "value", "required", "disabled", "readonly", "placeholder", "min", "max", "step", "isTextArea", "tooltip", "errorMessage"],

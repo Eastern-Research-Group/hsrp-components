@@ -76,7 +76,7 @@ export default {
     // Add event listener for accessible focus
     document.addEventListener('keydown', this.handleFocus);
   },
-  beforeDestroy() {
+  beforeUnmount() {
     document.removeEventListener('keydown', this.handleFocus);
   },
 };

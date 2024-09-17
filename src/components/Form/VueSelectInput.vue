@@ -8,17 +8,19 @@
     </label>
     <span v-if="errorMessage" class="usa-error-message">{{ errorMessage }}</span>
     <VueSelect
-      class="input"
       v-bind="{ ...inputProps, ...vueSelectProps, inputId: id, options: vueSelectOptions }"
+      class="input"
       :selectable="(option) => (areGroupsSelectable ? true : !option.group)"
-      @input="$emit('input', $event)"
-      @search="$emit('search', $event)"
+      @update:modelValue="updateValue"
+      @input="$emit('search', $event)"
     >
       <template #search="{ attributes, events }">
         <input
-          class="vs__search"
-          :required="required && (!value || (value && value.length === 0))"
           v-bind="attributes"
+          class="vs__search"
+          :required="
+            required && (!inputProps.modelValue || (inputProps.modelValue && inputProps.modelValue.length === 0))
+          "
           v-on="events"
         />
       </template>
@@ -59,6 +61,9 @@ export default {
     value: {
       type: [String, Number, Array, Object],
     },
+    modelValue: {
+      type: [String, Number, Array, Object],
+    },
     required: {
       type: Boolean,
     },
@@ -70,6 +75,15 @@ export default {
     },
     placeholder: {
       type: String,
+    },
+    min: {
+      type: Number,
+    },
+    max: {
+      type: Number,
+    },
+    step: {
+      type: Number,
     },
     tooltip: {
       type: String,
@@ -89,7 +103,7 @@ export default {
   computed: {
     inputProps() {
       return {
-        value: this.value,
+        modelValue: this.modelValue ?? this.value,
         label: this.label,
         srOnlyLabel: this.srOnlyLabel,
         placeholder: this.placeholder,
@@ -122,6 +136,12 @@ export default {
       return this.vueSelectProps.options;
     },
   },
+  methods: {
+    updateValue(value) {
+      this.$emit('input', value);
+      this.$emit('update:modelValue', value);
+    },
+  },
 };
 </script>
 
@@ -131,7 +151,7 @@ export default {
 }
 
 // Vue-Select input styles
-::v-deep .v-select {
+:deep() .v-select {
   padding: 0;
 
   ::placeholder {

@@ -39,6 +39,9 @@ export default {
     value: {
       type: [String, Number, Array],
     },
+    modelValue: {
+      type: [String, Number, Array],
+    },
     label: {
       type: String,
       required: true,
@@ -55,7 +58,7 @@ export default {
     },
     readonly: {
       type: Boolean,
-      default: false,
+      default: null,
     },
     options: {
       type: Array,
@@ -66,6 +69,7 @@ export default {
       default: true,
     },
   },
+  emits: ['input', 'update:modelValue'],
   computed: {
     optionObjects() {
       return this.options.map((option) => {
@@ -81,10 +85,11 @@ export default {
   },
   methods: {
     isChecked(option) {
-      if (Array.isArray(this.value)) {
-        return this.value.indexOf(option.value.toString()) > -1;
+      const value = this.modelValue ?? this.value;
+      if (Array.isArray(value)) {
+        return value.indexOf(option.value.toString()) > -1;
       }
-      return option.value === this.value;
+      return option.value === value;
     },
     updateValue(event) {
       if (this.type === 'radio') {
@@ -92,14 +97,16 @@ export default {
       }
 
       // Checkbox group requires special logic to store as array of values instead of single selected value
+      const value = this.modelValue ?? this.value;
       const eventVal = event.target.value;
-      const currentVal = this.value || [];
+      const currentVal = value || [];
 
       if (currentVal.indexOf(eventVal) > -1) {
         currentVal.splice(currentVal.indexOf(eventVal), 1);
       } else {
         currentVal.push(eventVal);
       }
+      this.$emit('update:modelValue', currentVal);
       return this.$emit('input', currentVal);
     },
   },

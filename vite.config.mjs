@@ -1,7 +1,7 @@
 import path from 'path';
 import { defineConfig, splitVendorChunkPlugin } from 'vite';
-import vue from '@vitejs/plugin-vue2';
-import visualizer from 'rollup-plugin-visualizer';
+import vue from '@vitejs/plugin-vue';
+// import visualizer from 'rollup-plugin-visualizer';
 
 export default defineConfig(({ mode }) => {
   return {
@@ -27,26 +27,24 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
-    plugins: [vue(), splitVendorChunkPlugin(), visualizer()],
+    plugins: [
+      vue({
+        template: {
+          compilerOptions: {
+            compatConfig: {
+              MODE: 3,
+            },
+          },
+        },
+      }),
+      splitVendorChunkPlugin(),
+    ],
     resolve: {
-      alias: [
-        {
-          find: '~',
-          replacement: path.resolve(__dirname, 'node_modules'),
-        },
-        {
-          find: '@',
-          replacement: path.resolve(__dirname, 'src'),
-        },
-        // Use minified vue build on prod
-        {
-          find: 'vue',
-          replacement: path.resolve(
-            __dirname,
-            mode === 'prod' ? './node_modules/vue/dist/vue.min.js' : './node_modules/vue'
-          ),
-        },
-      ],
+      alias: {
+        '~': path.resolve(__dirname, 'node_modules'),
+        '@': path.resolve(__dirname, 'src'),
+        // vue: '@vue/compat',
+      },
     },
     css: {
       preprocessorOptions: {
@@ -54,6 +52,9 @@ export default defineConfig(({ mode }) => {
           includePaths: ['./node_modules/@uswds/uswds/packages'],
         },
       },
+    },
+    optimizeDeps: {
+      noDiscovery: true,
     },
   };
 });

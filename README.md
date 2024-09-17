@@ -46,8 +46,8 @@ export default {
 
 ### Third-party libraries
 
-The components within this library currently rely on uswds (U.S. Web Design System), lodash (for computing methods within Table component), and vue-select (for special text input/select functionality)
+The components within this library currently rely on uswds (U.S. Web Design System), and vue-select (for special text input/select functionality)
 
 #### Tree-shaking
 
-To ensure the smallest bundle size, import specific functions from dependencies. For example, lodash is used in the Table component. Use `import sort from 'lodash/sort'` to ensure the full lodash library is not bundled with this component library. Do NOT use `import {sort} from 'lodash'`, otherwise the full library will be bundled.
+To ensure the smallest bundle size, import specific functions from dependencies.

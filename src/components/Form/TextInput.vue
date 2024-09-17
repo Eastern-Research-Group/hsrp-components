@@ -15,17 +15,17 @@
     </label>
     <textarea
       v-if="isTextArea"
+      v-bind="{ ...$props, ...$attrs }"
       :class="`usa-textarea ${errorMessage ? 'usa-input--error' : ''}`"
       :id="id"
-      v-bind="{ ...$props, ...$attrs }"
       ref="textarea"
       @input="updateValue"
     />
     <input
       v-else
+      v-bind="{ ...$props, ...$attrs }"
       :class="`usa-input ${errorMessage ? 'usa-input--error' : ''}`"
       :name="id"
-      v-bind="{ ...$props, ...$attrs }"
       @input="updateValue"
     />
     <span v-if="errorMessage" class="usa-error-message">{{ errorMessage }}</span>
@@ -57,6 +57,9 @@ export default {
     value: {
       type: [String, Number],
     },
+    modelValue: {
+      type: [String, Number],
+    },
     required: {
       type: Boolean,
     },
@@ -82,7 +85,7 @@ export default {
     },
     isTextArea: {
       type: Boolean,
-      default: false,
+      default: null,
     },
     tooltip: {
       type: String,
@@ -94,9 +97,11 @@ export default {
       type: String,
     },
   },
+  emits: ['input', 'update:modelValue'],
   methods: {
     updateValue(event) {
       this.$emit('input', event.target.value);
+      this.$emit('update:modelValue', event.target.value);
     },
     showDetailTooltip() {
       this.$emit('displaydetailtooltip');

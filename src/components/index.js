@@ -4,7 +4,6 @@ import Card from './Card.vue';
 import Loader from './Loader.vue';
 import Modal from './Modal.vue';
 import SideNav from './SideNav.vue';
-import Table from './Table/Table.vue';
 import Tooltip from './Tooltip.vue';
 import TooltipQ from './TooltipQ.vue';
 import UsTable from './UsTable/UsTable.vue';
@@ -24,7 +23,6 @@ export {
   Loader,
   Modal,
   SideNav,
-  Table,
   Tooltip,
   TooltipQ,
   UsTable,
