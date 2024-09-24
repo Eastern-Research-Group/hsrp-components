@@ -34,7 +34,11 @@
       <template #selected-option="value">
         <slot name="selected-option" :value="value" />
       </template>
-      <span slot="no-options" class="no-options-msg">{{ vueSelectProps.noOptionsMsg || 'No matching options.' }}</span>
+      <template #no-options>
+        <span slot="no-options" class="no-options-msg">{{
+          vueSelectProps.noOptionsMsg || 'No matching options.'
+        }}</span>
+      </template>
     </VueSelect>
   </div>
 </template>
