@@ -93,6 +93,7 @@ export default {
     },
     updateValue(event) {
       if (this.type === 'radio') {
+        this.$emit('update:modelValue', event.target.value);
         return this.$emit('input', event.target.value);
       }
 
