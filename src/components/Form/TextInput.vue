@@ -25,6 +25,7 @@
       v-else
       v-bind="{ ...inputProps, ...$attrs }"
       :class="`usa-input ${errorMessage ? 'usa-input--error' : ''}`"
+      :id="id"
       :name="id"
       @input="updateValue"
     />
