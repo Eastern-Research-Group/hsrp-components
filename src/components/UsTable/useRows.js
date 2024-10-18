@@ -101,10 +101,13 @@ const useRows = (props) => {
         isTableBusy.value = false;
       });
   };
-  watch([currentPage, currentSortKey, currentSortDir, () => JSON.stringify(props.filterValue)], () => {
-    if (!isServerSide) return;
-    updateServerRows();
-  });
+  watch(
+    [currentPage, currentSortKey, currentSortDir, () => props.apiUrl, () => JSON.stringify(props.filterValue)],
+    () => {
+      if (!isServerSide) return;
+      updateServerRows();
+    }
+  );
   onMounted(() => {
     if (isServerSide) {
       updateServerRows();
