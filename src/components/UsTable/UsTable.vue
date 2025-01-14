@@ -84,7 +84,7 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
     <div class="usa-table-container--responsive" tabindex="0" :style="{ maxHeight: height }">
       <table
         :class="`usa-table usa-table--striped usa-table--borderless ${compact ? 'usa-table--compact' : ''}`"
-        :aria-busy="isTableBusy ? true : null"
+        :aria-busy="props.busy || isTableBusy ? true : null"
         ref="table"
       >
         <caption v-if="caption">

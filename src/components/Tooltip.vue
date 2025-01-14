@@ -57,7 +57,7 @@ const show = () => {
 
 const hide = () => {
   // Hide the tooltip
-  tooltip.value.removeAttribute('data-show');
+  tooltip.value?.removeAttribute('data-show');
 
   // Disable the event listeners
   popperInstance.value.setOptions((options) => ({
@@ -89,13 +89,14 @@ onMounted(() => {
   });
 
   hideEvents.forEach((event) => {
-    hoverEl.value.addEventListener(event, () => setTimeout(hide, props.delay / 2));
+    // Important: add 1 ms to delay to prevent tooltip staying open if user mouses over very quickly
+    hoverEl.value.addEventListener(event, () => setTimeout(hide, props.delay + 1));
   });
 });
 </script>
 
 <template>
-  <span>
+  <span class="hsrp-tooltip-container">
     <component
       v-if="iconOnly || !tooltipOnly"
       :is="iconOnly ? 'span' : 'abbr'"

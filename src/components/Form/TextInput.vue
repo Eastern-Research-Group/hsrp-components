@@ -15,7 +15,7 @@
     </label>
     <textarea
       v-if="isTextArea"
-      v-bind="{ ...$props, ...$attrs }"
+      v-bind="{ ...inputProps, ...$attrs }"
       :class="`usa-textarea ${errorMessage ? 'usa-input--error' : ''}`"
       :id="id"
       ref="textarea"
@@ -23,8 +23,9 @@
     />
     <input
       v-else
-      v-bind="{ ...$props, ...$attrs }"
+      v-bind="{ ...inputProps, ...$attrs }"
       :class="`usa-input ${errorMessage ? 'usa-input--error' : ''}`"
+      :id="id"
       :name="id"
       @input="updateValue"
     />
@@ -95,6 +96,21 @@ export default {
     },
     errorMessage: {
       type: String,
+    },
+  },
+  computed: {
+    inputProps() {
+      return {
+        type: this.type,
+        required: this.required,
+        disabled: this.disabled,
+        readonly: this.readonly,
+        placeholder: this.placeholder,
+        min: this.min,
+        max: this.max,
+        step: this.step,
+        value: this.modelValue ?? this.value,
+      };
     },
   },
   emits: ['input', 'update:modelValue'],
