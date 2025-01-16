@@ -1,7 +1,7 @@
 <template>
   <component :is="isHyperlink ? 'router-link' : 'div'" :to="hyperlinkPath" class="card-container">
     <div :class="`header-container ${icon ? '' : 'no-icon'}`">
-      <i v-if="icon" :class="`fas fa-2x ${icon ? `fa-${icon}` : ''}`"></i>
+      <Icon v-if="icon" :icon="icon.includes(':') ? icon : `fa-solid:${icon}`" class="fas fa-2x" />
       <h3 class="card-header">{{ header }}</h3>
     </div>
     <div class="card-content">
@@ -11,12 +11,17 @@
 </template>
 
 <script>
+import { Icon } from '@iconify/vue';
+
 export default {
   props: {
     isHyperlink: Boolean,
     hyperlinkPath: String,
     header: String.required,
-    icon: String,
+    icon: {
+      type: String,
+      default: '',
+    },
   },
 };
 </script>

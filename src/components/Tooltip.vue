@@ -1,6 +1,7 @@
 <script setup>
 import { onMounted, ref } from 'vue';
 import { createPopper } from '@popperjs/core';
+import { Icon } from '@iconify/vue';
 
 const props = defineProps({
   id: {
@@ -100,14 +101,15 @@ onMounted(() => {
     <component
       v-if="iconOnly || !tooltipOnly"
       :is="iconOnly ? 'span' : 'abbr'"
-      :class="iconOnly ? `fa fa-${icon}` : 'hsrp-tooltip-label'"
+      :class="iconOnly ? '' : 'hsrp-tooltip-label'"
       :id="id"
       :aria-label="description"
       tabindex="0"
       @click="emit('onClickIcon')"
       @keyup.enter="emit('onClickIcon')"
     >
-      {{ iconOnly ? '' : label }}
+      <Icon v-if="iconOnly" class="tooltip-icon" :icon="icon.includes(':') ? icon : `fa-solid:${icon}`" />
+      <span v-else>label</span>
     </component>
     <div ref="tooltip" class="hsrp-tooltip" role="tooltip">
       {{ description }}
@@ -122,10 +124,6 @@ onMounted(() => {
 .hsrp-tooltip-label {
   text-decoration: none;
   border-bottom: 1px dashed color('base-darker');
-}
-.fa-info-circle {
-  cursor: pointer;
-  color: $blue;
 }
 
 // Popper.js styles
@@ -146,6 +144,11 @@ onMounted(() => {
 }
 .hsrp-tooltip[data-show] {
   display: block;
+}
+.tooltip-icon {
+  cursor: pointer;
+  color: color('primary');
+  font-size: size('body', 'xs');
 }
 .tooltip-arrow,
 .tooltip-arrow::before {

@@ -1,4 +1,3 @@
-/* eslint-disable import/prefer-default-export */
 export const toggleArrayItem = (array, item) => {
   const index = array.indexOf(item);
   if (index > -1) {
