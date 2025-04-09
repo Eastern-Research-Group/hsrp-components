@@ -13,18 +13,12 @@
       <slot />
     </span>
     <Loader v-if="isBusy" class="inline" />
-    <Tooltip
-      v-if="tooltip"
-      :id="uuid"
-      :description="tooltip"
-      :tooltip="true"
-      :delay="100"
-    />
+    <Tooltip v-if="tooltip" :id="uuid" :description="tooltip" :tooltip="true" :delay="100" />
   </button>
 </template>
 
 <script>
-import {Icon} from '@iconify/vue';
+import { Icon } from '@iconify/vue';
 import Loader from './Loader.vue';
 import Tooltip from './Tooltip.vue';
 
@@ -61,19 +55,19 @@ export default {
     tooltip: {
       type: String,
       default: null,
-    }
+    },
   },
   emits: ['click'],
   components: { Icon, Loader, Tooltip },
   data() {
     return {
       uuid: uuid.toString(),
-    }
+    };
   },
   beforeCreate() {
     this.uuid = uuid.toString();
     uuid += 1;
-  }
+  },
 };
 </script>
 
@@ -120,7 +114,7 @@ export default {
     outline-offset: 2px;
   }
 
-  .btn-label {
+  .btn-icon + .btn-label {
     vertical-align: middle;
   }
 }

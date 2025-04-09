@@ -2,7 +2,8 @@
   <component :is="isHyperlink ? 'router-link' : 'div'" :to="hyperlinkPath" class="card-container">
     <div :class="`header-container ${icon ? '' : 'no-icon'}`">
       <Icon v-if="icon" :icon="icon.includes(':') ? icon : `fa-solid:${icon}`" class="fas fa-2x" />
-      <h3 class="card-header">{{ header }}</h3>
+      <h3 v-if="header" class="card-header">{{ header }}</h3>
+      <slot name="header" />
     </div>
     <div class="card-content">
       <slot />
@@ -17,11 +18,14 @@ export default {
   props: {
     isHyperlink: Boolean,
     hyperlinkPath: String,
-    header: String.required,
+    header: String,
     icon: {
       type: String,
       default: '',
     },
+  },
+  components: {
+    Icon,
   },
 };
 </script>

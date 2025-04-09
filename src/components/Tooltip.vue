@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, ref } from 'vue';
+import { onMounted, onBeforeUnmount, ref } from 'vue';
 import { createPopper } from '@popperjs/core';
 import { Icon } from '@iconify/vue';
 
@@ -86,13 +86,22 @@ onMounted(() => {
   const hideEvents = ['mouseleave', 'blur'];
 
   showEvents.forEach((event) => {
-    hoverEl.value.addEventListener(event, () => setTimeout(show, props.delay));
+    hoverEl.value?.addEventListener(event, () => setTimeout(show, props.delay));
   });
 
   hideEvents.forEach((event) => {
     // Important: add 1 ms to delay to prevent tooltip staying open if user mouses over very quickly
-    hoverEl.value.addEventListener(event, () => setTimeout(hide, props.delay + 1));
+    hoverEl.value?.addEventListener(event, () => setTimeout(hide, props.delay + 1));
   });
+});
+onBeforeUnmount(() => {
+  popperInstance.value.destroy();
+  if (hoverEl.value) {
+    hoverEl.value.removeEventListener('mouseenter', show);
+    hoverEl.value.removeEventListener('mouseleave', hide);
+    hoverEl.value.removeEventListener('focus', show);
+    hoverEl.value.removeEventListener('blur', hide);
+  }
 });
 </script>
 
@@ -109,7 +118,7 @@ onMounted(() => {
       @keyup.enter="emit('onClickIcon')"
     >
       <Icon v-if="iconOnly" class="tooltip-icon" :icon="icon.includes(':') ? icon : `fa-solid:${icon}`" />
-      <span v-else>label</span>
+      <span v-else>{{ label }}</span>
     </component>
     <div ref="tooltip" class="hsrp-tooltip" role="tooltip">
       {{ description }}
