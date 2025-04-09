@@ -1,6 +1,6 @@
 {
   "name": "hsrp-components",
-  "version": "1.1.5",
+  "version": "2.0.3",
   "scripts": {
     "build": "vite build",
     "lint": "eslint src",
@@ -15,6 +15,7 @@
     "vue-tags.json"
   ],
   "dependencies": {
+    "@iconify/vue": "^4.3.0",
     "@popperjs/core": "^2.11.8",
     "@uswds/uswds": "3.7.1",
     "vue": "^3.4.38",
@@ -24,14 +25,13 @@
     "@babel/eslint-parser": "^7.18.2",
     "@babel/preset-env": "^7.18.10",
     "@vitejs/plugin-vue": "^5.1.2",
-    "@vue/eslint-config-airbnb": "^6.0.0",
-    "@vue/eslint-config-prettier": "^6.0.0",
     "eslint": "^8.17.0",
-    "eslint-config-prettier": "^6.1.0",
+    "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-import": "^2.20.2",
-    "eslint-plugin-prettier": "^3.1.0",
+    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-vue": "^9.1.0",
     "postcss": "^8.4.16",
+    "prettier": "^3.3.3",
     "require-context": "^1.1.0",
     "rollup-plugin-visualizer": "^5.8.0",
     "sass": "~1.69.5",

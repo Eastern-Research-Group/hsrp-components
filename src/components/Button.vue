@@ -1,20 +1,28 @@
 <template>
   <button
+    :id="uuid"
     :class="`usa-button usa-button--${btnStyle}`"
     :type="type"
     :title="title"
     :disabled="disabled"
     @click="$emit('click')"
   >
-    <span v-if="icon" :class="`btn-icon fa fa-${icon} ${label ? 'margin-right-05' : ''}`"></span>
-    {{ label }}
-    <slot />
+    <Icon v-if="icon" class="btn-icon" :icon="icon.includes(':') ? icon : `fa-solid:${icon}`" />
+    <span v-if="label || $slots.default" :class="`btn-label ${icon ? 'margin-left-05' : ''}`">
+      {{ label }}
+      <slot />
+    </span>
     <Loader v-if="isBusy" class="inline" />
+    <Tooltip v-if="tooltip" :id="uuid" :description="tooltip" :tooltip="true" :delay="100" />
   </button>
 </template>
 
 <script>
+import { Icon } from '@iconify/vue';
 import Loader from './Loader.vue';
+import Tooltip from './Tooltip.vue';
+
+let uuid = 0;
 
 export default {
   name: 'Button',
@@ -44,9 +52,22 @@ export default {
       type: Boolean,
       default: false,
     },
+    tooltip: {
+      type: String,
+      default: null,
+    },
   },
   emits: ['click'],
-  components: { Loader },
+  components: { Icon, Loader, Tooltip },
+  data() {
+    return {
+      uuid: uuid.toString(),
+    };
+  },
+  beforeCreate() {
+    this.uuid = uuid.toString();
+    uuid += 1;
+  },
 };
 </script>
 
@@ -88,13 +109,13 @@ export default {
     pointer-events: auto; // allows for "title" tooltip to display on disabled buttons
   }
 
-  .btn-icon {
-    margin-right: 0.2rem;
-  }
-
   &:not([disabled]):focus,
   &:not([disabled]).usa-focus {
     outline-offset: 2px;
+  }
+
+  .btn-icon + .btn-label {
+    vertical-align: middle;
   }
 }
 </style>

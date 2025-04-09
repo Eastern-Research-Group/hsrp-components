@@ -8,7 +8,7 @@
       <div class="modal-header">
         <span>{{ header }}</span>
         <Button v-if="closeFnc" class="close-btn" btnStyle="unstyled" icon="times" @click="closeFnc">
-          <span class="sr-only">Close</span>
+          <span class="usa-sr-only">Close</span>
         </Button>
       </div>
       <div class="modal-content">

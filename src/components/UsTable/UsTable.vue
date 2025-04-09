@@ -1,4 +1,5 @@
 <script setup>
+import { Icon } from '@iconify/vue';
 import { toggleArrayItem } from '../../utils/arrayHelper';
 import Button from '../Button.vue';
 import TextInput from '../Form/TextInput.vue';
@@ -93,7 +94,12 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
           }}
         </caption>
         <colgroup>
-          <col v-for="column in tableColumns" :key="`col_${column.key}`" :id="`col_${column.key}`" />
+          <col
+            v-for="column in tableColumns"
+            :key="`col_${column.key}`"
+            :id="`col_${column.key}`"
+            :width="column.width"
+          />
         </colgroup>
         <thead>
           <tr>
@@ -103,7 +109,7 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
               :id="column.id ? column.id : undefined"
               :class="column.thClass"
               scope="col"
-              :data-sortable="column.sortable ? true : false"
+              :data-sortable="column.sortable ? true : undefined"
               :aria-colindex="index + 1"
               :aria-label="`${column.label}, ${
                 column.sortable
@@ -128,13 +134,13 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                 } order.`"
                 @click="sortTable(column.key)"
               >
-                <span
-                  :class="`fa ${
+                <Icon
+                  :icon="`fa-solid:${
                     currentSortKey !== column.key
-                      ? 'fa-arrows-alt-v'
-                      : `fa-long-arrow-alt-${currentSortDir === 'asc' ? 'up' : 'down'}`
+                      ? 'arrows-alt-v'
+                      : `long-arrow-alt-${currentSortDir === 'asc' ? 'up' : 'down'}`
                   }`"
-                ></span>
+                />
               </button>
             </th>
           </tr>
@@ -157,16 +163,17 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                 :data-sort-active="currentSortKey === column.key ? true : null"
                 :data-label="column.label"
               >
-                <Button
-                  v-if="column.key === 'showAdditional'"
-                  class="expand-row-button"
-                  btnStyle="unstyled"
-                  :icon="expandedRowIndexes.includes(index) ? 'minus-circle' : 'plus-circle'"
-                  :title="
-                    expandedRowIndexes.includes(index) ? 'Collapse' : (column.label ?? 'Expand additional columns')
-                  "
-                  @click="toggleArrayItem(expandedRowIndexes, index)"
-                />
+                <div class="show-additional" v-if="column.key === 'showAdditional'">
+                  <Button
+                    class="expand-row-button"
+                    btnStyle="unstyled"
+                    :icon="expandedRowIndexes.includes(index) ? 'minus-circle' : 'plus-circle'"
+                    :title="
+                      expandedRowIndexes.includes(index) ? 'Collapse' : (column.label ?? 'Expand additional columns')
+                    "
+                    @click="toggleArrayItem(expandedRowIndexes, index)"
+                  />
+                </div>
                 <slot
                   v-else-if="$slots[`cell(${column.key})`]"
                   :name="`cell(${column.key})`"
@@ -174,7 +181,14 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                   :value="row[column.key]"
                   :index="index"
                 />
-                <slot v-else-if="$slots['cell()']" name="cell()" :item="row" :value="row[column.key]" :index="index" />
+                <slot
+                  v-else-if="$slots['cell()']"
+                  name="cell()"
+                  :item="{ row, column }"
+                  :column="column"
+                  :value="row[column.key]"
+                  :index="index"
+                />
                 <span v-else>
                   {{ column.formatter ? column.formatter(row[column.key]) : row[column.key] }}
                 </span>
@@ -227,7 +241,21 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
                 :class="column.tdClass"
                 :data-label="column.label"
               >
-                <span>
+                <slot
+                  v-if="$slots[`footer(${column.key})`]"
+                  :name="`footer(${column.key})`"
+                  :item="row"
+                  :value="row[column.key]"
+                  :index="index"
+                />
+                <slot
+                  v-else-if="$slots['footer()']"
+                  name="footer()"
+                  :item="row"
+                  :value="row[column.key]"
+                  :index="index"
+                />
+                <span v-else>
                   {{ column.formatter ? column.formatter(row[column.key]) : row[column.key] }}
                 </span>
               </td>
@@ -241,6 +269,7 @@ const { currentPage, currentSortDir, currentSortKey, expandedRowIndexes, sortTab
       v-bind="{ total, perPage, currentPage }"
       @changePage="(page) => (currentPage = page)"
     />
+    <!-- <slot /> -->
   </div>
 </template>
 
@@ -290,7 +319,7 @@ table.usa-table {
     }
   }
 
-  & th[data-sortable] {
+  & th[data-sortable='true'] {
     padding-right: 1.5rem;
   }
 
@@ -337,7 +366,15 @@ table.usa-table {
   color: color('gray-90');
 }
 
+:deep(.iconify) {
+  vertical-align: middle;
+}
+
 // Responsive styles for hiding columns and expanding below the row
+.show-additional {
+  max-width: 20px;
+}
+
 .expand-row-button {
   margin: 0;
   padding: 0;

@@ -1,4 +1,5 @@
 <script setup>
+import { Icon } from '@iconify/vue';
 import { computed } from 'vue';
 
 const props = defineProps({
@@ -53,7 +54,7 @@ const pageSlots = computed(() => {
             :tabindex="currentPage === 1 ? -1 : 0"
             @click="currentPage !== 1 && $emit('changePage', currentPage - 1)"
           >
-            <span class="fa fa-chevron-left"></span>
+            <Icon icon="fa-solid:chevron-left" class="margin-right-1" />
             <span class="usa-pagination__link-text">Previous</span></a
           >
         </li>
@@ -82,8 +83,9 @@ const pageSlots = computed(() => {
             :disabled="currentPage === lastPage ? true : null"
             :tabindex="currentPage === lastPage ? -1 : 0"
             @click="currentPage !== lastPage && $emit('changePage', currentPage + 1)"
-            ><span class="usa-pagination__link-text">Next </span> <span class="fa fa-chevron-right"></span
-          ></a>
+            ><span class="usa-pagination__link-text">Next </span>
+            <Icon icon="fa-solid:chevron-right" class="margin-left-1" />
+          </a>
         </li>
       </ul>
     </nav>
@@ -123,14 +125,6 @@ a.usa-pagination__link:hover {
   .usa-pagination__link-text {
     text-decoration: underline;
   }
-}
-
-.fa-chevron-left {
-  margin-right: 0.5rem;
-}
-
-.fa-chevron-right {
-  margin-left: 0.5rem;
 }
 
 .pagination-text {

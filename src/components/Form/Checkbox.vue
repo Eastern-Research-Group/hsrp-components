@@ -11,7 +11,7 @@
         @change="$emit('change', $event)"
       />
       <label :id="labelId" :class="`usa-checkbox__label ${!label && srOnlyLabel ? 'margin-top-0' : ''}`" :for="id">
-        <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
+        <span v-if="srOnlyLabel" class="usa-sr-only">{{ srOnlyLabel }}</span>
         {{ label }}
         <slot name="label"></slot>
       </label>

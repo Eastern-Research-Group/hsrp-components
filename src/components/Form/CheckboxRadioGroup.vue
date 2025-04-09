@@ -1,7 +1,7 @@
 <template>
   <fieldset class="usa-fieldset" :readonly="readonly">
     <legend class="usa-legend usa-legend">
-      <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
+      <span v-if="srOnlyLabel" class="usa-sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
       <slot name="hoverInfo" />
     </legend>

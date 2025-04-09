@@ -1,7 +1,7 @@
 <template>
   <div :class="`usa-form-group ${errorMessage ? 'usa-form-group--error' : ''}`">
     <label :for="id" :class="`usa-label ${!label && srOnlyLabel ? 'sr-only' : ''}`">
-      <span v-if="srOnlyLabel" class="sr-only">{{ srOnlyLabel }}</span>
+      <span v-if="srOnlyLabel" class="usa-sr-only">{{ srOnlyLabel }}</span>
       {{ label }}
       <slot name="label"></slot>
       <Tooltip v-if="tooltip" :id="`textTooltip${id}`" :iconOnly="true" :description="tooltip" />
